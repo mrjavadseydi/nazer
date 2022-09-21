@@ -1,0 +1,95 @@
+h1, h2, h3, h4, h5, h6, p, a, li, input, label, button, span, div, .table-cell{
+    font-family: IRANSans!important;
+}
+
+#kt_aside_mobile_toggle{
+    transform: rotateZ(180deg);
+}
+
+.nav.nav-tabs.nav-tabs-line .nav-link{
+    margin: 0 0 0 1rem!important;
+}
+
+.aside-menu .menu-nav > .menu-item > .menu-heading .menu-arrow, .aside-menu .menu-nav > .menu-item > .menu-link .menu-arrow:before{
+    transform: rotate(180deg);
+}
+
+.menu-item-open .menu-arrow:before{
+    transform: rotate(90deg)!important;
+}
+
+.navi .navi-item .navi-link{
+    text-align: right;
+}
+
+.card.card-custom > .card-header .card-title .card-label{
+    text-align: right;
+}
+
+.bootstrap-select .dropdown-toggle .filter-option-inner-inner{
+    text-align: right;
+}
+
+.dropdown-item{
+    text-align: right;
+}
+
+.datatable.datatable-default > .datatable-table > .datatable-body .datatable-row > .datatable-cell > span{
+    font-family: IRANSans;
+}
+
+.select2-results__option{
+    text-align: right;
+}
+
+@media (min-width: 992px) {
+    .aside-fixed .aside{
+        left: unset;
+        right: 0;
+    }
+    .aside-fixed .wrapper {
+        padding-left: unset!important;
+        padding-right: 265px;
+    }
+
+    .aside-fixed.aside-minimize .wrapper{
+        padding-right: 70px!important;
+    }
+
+    .aside-enabled .header.header-fixed, .aside-enabled.subheader-fixed .subheader{
+        right: 265px;
+        left: unset;
+        width: calc(100% - 265px);
+    }
+
+    .header-fixed.aside-minimize .header, .subheader-fixed.aside-minimize .subheader{
+        right: 70px;
+        width: calc(100% - 70px);
+    }
+
+    .header-menu .menu-nav > .menu-item .menu-submenu.menu-submenu-left{
+        right: 0;
+        left: unset;
+    }
+}
+
+.select2-container{
+    width: 100%!important;
+}
+
+.dropzone{
+    border-style: dashed!important;
+    border-radius: 0.5em;
+}
+
+@media (max-width: 991.98px){
+    .aside, .header-menu-wrapper{
+        right: -295px;
+        left: unset;
+    }
+
+    .aside.aside-on, .header-menu-wrapper.header-menu-wrapper-on{
+        right: 0;
+        left: unset;
+    }
+}

@@ -1,0 +1,111 @@
+<div class="card" data-id="$$ID$$">
+    <div class="card-header">
+        <div class="card-title collapsed" data-toggle="collapse" data-target="#employers$$ID$$">
+            نام و نام خانوادگی
+        </div>
+    </div>
+    <div id="employers$$ID$$" class="collapse" data-parent="#employers">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-4 col-sm-4 col-xs-5">
+                    <div class="form-group">
+                        <label for="nationalityCode"><strong>کد ملی</strong></label>
+                        <input type="text" class="form-control" name="employers[$$ID$$][nationalityCode]" id="nationalityCode" required>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-4">
+                    <div class="form-group">
+                        <label for="fullName" class="form-label"><strong>نام و نام خانوادگی</strong></label>
+                        <input type="text" class="form-control" name="employers[$$ID$$][fullName]" id="fullName" oninput="changeAccordionTitle(this)">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-4">
+                    <div class="form-group">
+                        <label for="supportStatus" class="form-label"><strong>وضعیت مددجویی</strong></label>
+                        <select name="employers[$$ID$$][supportStatus]" id="supportStatus" class="form-control">
+                            <option value="مددجو">مددجو</option>
+                            <option value="غیر مددجو">غیر مددجو</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-4">
+                    <div class="form-group">
+                        <label for="phone" class="form-label"><strong>شماره تماس</strong></label>
+                        <input type="text" class="form-control" name="employers[$$ID$$][phone]" id="phone">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-4">
+                    <div class="form-group">
+                        <label for="employer_status" class="form-label"><strong>وضعیت شاغل در طرح</strong></label>
+                        <select name="employers[$$ID$$][employer_status]" id="employer_status" class="form-control">
+                            <option value="تمام وقت">تمام وقت</option>
+                            <option value="پاره وقت">پاره وقت</option>
+                            <option value="ساعتی">ساعتی</option>
+                            <option value="موردی">موردی</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-4">
+                    <div class="form-group">
+                        <label for="start_date" class="form-label"><strong>تاریخ شروع</strong></label>
+                        <input type="text" class="form-control persianDate" name="employers[$$ID$$][start_date]" id="start_date">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-4">
+                    <div class="form-group">
+                        <label for="gender" class="form-label"><strong>جنسیت</strong></label>
+                        <div class="radio-inline" id="gender">
+                            <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                <input type="radio" name="employers[$$ID$$][gender]" value="male"/>
+                                <span class="mr-0 ml-2"></span>
+                                مرد
+                            </label>
+                            <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                <input type="radio" name="employers[$$ID$$][gender]" value="female"/>
+                                <span class="mr-0 ml-2"></span>
+                                زن
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-4">
+                    <div class="form-group">
+                        <label for="paid_status" class="form-label"><strong>وضعیت مزد بگیری</strong></label>
+                        <div class="radio-inline" id="paid_status">
+                            <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                <input type="radio" name="employers[$$ID$$][paid_status]" value="employedWithSalary"/>
+                                <span class="mr-0 ml-2"></span>
+                                شاغل مزد بگیر
+                            </label>
+                            <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                <input type="radio" name="employers[$$ID$$][paid_status]" value="familyWithoutSalary"/>
+                                <span class="mr-0 ml-2"></span>
+                                کارکنان خانوادگی بدون مزد
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-4">
+                    <div class="form-group">
+                        <label for="is_insured" class="form-label"><strong>بیمه</strong></label>
+                        <div class="radio-inline" id="is_insured">
+                            <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                <input type="radio" name="employers[$$ID$$][is_insured]" value="yes"/>
+                                <span class="mr-0 ml-2"></span>
+                                دارد
+                            </label>
+                            <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                <input type="radio" name="employers[$$ID$$][is_insured]" value="no"/>
+                                <span class="mr-0 ml-2"></span>
+                                ندارد
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-danger" type="button" onclick="deleteEmployer('$$ID$$')">حذف کردن</button>
+        </div>
+    </div>
+</div>
