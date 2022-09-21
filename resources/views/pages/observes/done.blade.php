@@ -5,10 +5,10 @@
     <div class="container-fluid">
         @if( isset($data['planID']) )
             <livewire:observes :planid="$data['planID']"/>
+        @elseif( isset($data['supervisorID']) and isset($data['persianFrom']) and isset($data['persianTo']) )
+            <livewire:observes :supervisorid="$data['supervisorID']" :persianfrom="$data['persianFrom']" :persianto="$data['persianTo']"/>
         @elseif( isset($data['supervisorID']) )
             <livewire:observes :supervisorid="$data['supervisorID']"/>
-        @elseif( isset($data['persianFrom']) and isset($data['persianTo']) )
-            <livewire:observes :persianfrom="$data['persianFrom']" :persianto="$data['persianTo']"/>
         @else
             <livewire:observes/>
         @endif
