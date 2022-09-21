@@ -63,16 +63,16 @@ class Plans extends LivewireDatatable
 
     public function columns()
     {
-        $extras = [15 => 'supervisor.fullName:نام ناظر'];
+        $more = Column::callback(['id', 'supervisor.fullName'], function ($id, $supervisorFullName){
+            $supervisors = Supervisor::all();
+            return view('livewire.more-actions', compact('id', 'supervisorFullName', 'supervisors'));
+        });
+        $extras = [1 => $more, 15 => 'supervisor.fullName:نام ناظر'];
 
         $columns = [
             NumberColumn::callback('id', function ($id){
                 return $this->counter++;
             })->label('#')->alignRight()->headerAlignCenter(),
-            Column::callback(['id', 'supervisor.fullName'], function ($id, $supervisorFullName){
-                $supervisors = Supervisor::all();
-                return view('livewire.more-actions', compact('id', 'supervisorFullName', 'supervisors'));
-            }),
             Column::name('organizations.title')->label("اداره")->alignRight()->headerAlignCenter(),
             Column::name('performers.nationalityCode')->label("کد ملی")->alignRight()->headerAlignCenter()->filterable(),
             Column::callback('performers.phone', function ($phone){
@@ -131,8 +131,10 @@ class Plans extends LivewireDatatable
         }
         else{
             foreach ($extras as $index => $extra) {
-                $splicedExtra = explode(':', $extra);
-                $extra = Column::name($splicedExtra[0])->label($splicedExtra[1])->alignRight()->headerAlignCenter();
+                if( !($extra instanceof Column) ){
+                    $splicedExtra = explode(':', $extra);
+                    $extra = Column::name($splicedExtra[0])->label($splicedExtra[1])->alignRight()->headerAlignCenter();
+                }
                 array_splice($columns, $index, 0, [$extra]);
             }
 
