@@ -65,7 +65,7 @@ class Observes extends LivewireDatatable
             Column::name('performer.phone')->label('تلفن تماس مجری')->alignRight()->headerAlignCenter(),
             Column::name('supervisor.fullName')->label('ناظر')->alignRight()->headerAlignCenter(),
             Column::callback('observes.observe_date', function ($date){
-                return miladi2shamsi('Y/m/d', $date);
+                return miladi2shamsi('Y/m/d H:i', $date);
             })->label('تاریخ بازدید')->alignRight()->headerAlignCenter(),
             Column::callback(['id'], function ($observeID){
                 $planID = Observe::find($observeID)->load('plan')->plan->id;

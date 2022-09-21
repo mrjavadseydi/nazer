@@ -164,8 +164,11 @@ class PlanController extends Controller
             }
         }
 
+        $now = now();
         $date = fa2en($request->observe_date);
         $expiration = shamsi2miladi('Y/m/d', $date);
+        $expiration->addHours($now->hour);
+        $expiration->addMinutes($now->minute);
         $date = $expiration->toDate();
 
         $plan = Plan::find($planID)->load(['supervisor', 'performer']);
