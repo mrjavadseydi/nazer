@@ -129,6 +129,11 @@
 
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group">
+                            <label for="" class="form-label">اداره: <strong>{{ $plan->organization->title }}</strong></label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="form-group">
                             <label for="" class="form-label">سطح طرح: <strong>{{ $plan->level }}</strong></label>
                         </div>
                     </div>
