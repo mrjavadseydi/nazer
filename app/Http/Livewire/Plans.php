@@ -69,6 +69,10 @@ class Plans extends LivewireDatatable
             NumberColumn::callback('id', function ($id){
                 return $this->counter++;
             })->label('#')->alignRight()->headerAlignCenter(),
+            Column::callback(['id', 'supervisor.fullName'], function ($id, $supervisorFullName){
+                $supervisors = Supervisor::all();
+                return view('livewire.more-actions', compact('id', 'supervisorFullName', 'supervisors'));
+            }),
             Column::name('organizations.title')->label("اداره")->alignRight()->headerAlignCenter(),
             Column::name('performers.nationalityCode')->label("کد ملی")->alignRight()->headerAlignCenter()->filterable(),
             Column::callback('performers.phone', function ($phone){
@@ -141,5 +145,14 @@ class Plans extends LivewireDatatable
         $plan = Plan::find($rowId);
         $plan->area_city_id = $value == '' ? null : $value;
         $plan->save();
+    }
+
+    public function saveSupervisor($planID, $supervisorID)
+    {
+        $plan = Plan::find($planID);
+        $plan->supervisor_id = $supervisorID;
+        $plan->save();
+
+        $this->redirect(route('plans.index'));
     }
 }
