@@ -170,6 +170,7 @@ class PlanController extends Controller
         $expiration->addHours($now->hour);
         $expiration->addMinutes($now->minute);
         $date = $expiration->toDate();
+        $stringDate = $date->format('Y/m/d');
 
         $plan = Plan::find($planID)->load(['supervisor', 'performer']);
         $plan->last_observe_date = $date;
@@ -190,7 +191,10 @@ class PlanController extends Controller
         }
         $plan->save();
 
-        $observe = new Observe();
+        $observe = Observe::where('plan_id', $plan->id)->whereDate('observe_date', $stringDate)->first();
+        if( !$observe )
+            $observe = new Observe();
+
         $observe->supervisor_id = Supervisor::where('nationalityCode', Auth::user()->nationalityCode)->first()->id;
         $observe->performer_id = $plan->performer->id;
         $observe->plan_id = $plan->id;
