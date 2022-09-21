@@ -23,13 +23,13 @@ class Observes extends LivewireDatatable
         if( $this->planid ) {
             $observes = Plan::find($this->planid)->observes()->getQuery();
         }
-        elseif( $this->supervisorid ){
-            $observes = Supervisor::find($this->supervisorid)->observes()->getQuery();
-        }
-        elseif( $this->persianfrom and $this->persianto ){
+        elseif( $this->supervisorid and $this->persianfrom and $this->persianto ){
             $gregorianFrom = shamsi2miladi('Y/m/d', $this->persianfrom);
             $gregorianTo = shamsi2miladi('Y/m/d', $this->persianto);
-            $observes = Observe::whereBetween('observe_date', [$gregorianFrom, $gregorianTo]);
+            $observes = Observe::whereBetween('observe_date', [$gregorianFrom, $gregorianTo])->where('observes.supervisor_id', $this->supervisorid);
+        }
+        elseif( $this->supervisorid ){
+            $observes = Supervisor::find($this->supervisorid)->observes()->getQuery();
         }
         else{
             if( Str::lower($user->role->name) == 'supervisor' ){

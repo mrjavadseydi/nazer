@@ -68,10 +68,10 @@ class Supervisors extends LivewireDatatable
 
                 return $count;
             })->label('نظارت های انجام شده')->alignRight()->headerAlignCenter(),
-            Column::callback(['id', 'phone', 'fullName'], function ($id, $phone, $fullName) use($persianFrom, $persianTo, $gregorianFrom, $gregorianTo){
-                $count = Observe::where('supervisor_id', $id)->whereBetween('observe_date', [$gregorianFrom, $gregorianTo])->get()->count() ?? 0;
+            Column::callback(['id', 'phone', 'fullName'], function ($supervisorID, $phone, $fullName) use($persianFrom, $persianTo, $gregorianFrom, $gregorianTo){
+                $count = Observe::where('supervisor_id', $supervisorID)->whereBetween('observe_date', [$gregorianFrom, $gregorianTo])->get()->count() ?? 0;
                 if( $count )
-                    return "<a style='display: block' href='".route('observes.done', compact('persianFrom', 'persianTo'))."'>$count</a>";
+                    return "<a style='display: block' href='".route('observes.done', compact('supervisorID', 'persianFrom', 'persianTo'))."'>$count</a>";
                 return $count;
             })->label('نظارت های انجام شده ' . $monthArray[$month - 1])->alignRight()->headerAlignCenter(),
             Column::callback(['id'], function ($id){
