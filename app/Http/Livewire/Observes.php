@@ -33,10 +33,10 @@ class Observes extends LivewireDatatable
         }
         else{
             if( Str::lower($user->role->name) == 'supervisor' ){
-                $observes = Supervisor::where('nationalityCode', $user->nationalityCode)->first()->observes()->getQuery();
+                $observes = Supervisor::where('nationalityCode', $user->nationalityCode)->first()->observes()->orderByDesc('observe_date')->getQuery();
             }
             else{
-                $observes = Observe::query();
+                $observes = Observe::query()->orderByDesc('observe_date');
             }
         }
 
