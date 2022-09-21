@@ -583,7 +583,7 @@
 
                                                     <div class="col-lg-4 col-sm-5 col-xs-5">
                                                         <label for="" class="form-label"><strong>بارگزاری فایل</strong></label>
-                                                        <input type="file" name="file" accept="image/*" capture="camera">
+                                                        <input type="file" accept="image/*;capture=camera">
                                                     </div>
 
                                                     <div class="col-lg-2 col-sm-2 col-xs-2">
