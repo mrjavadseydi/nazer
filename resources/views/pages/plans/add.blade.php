@@ -230,14 +230,14 @@
 @endsection
 
 @push('dashboard_extra_js')
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="{{ asset('/assets/js/jquery-3.6.1.min.js')}}></script>
     <script src="{{ asset('/assets/js/jquery.steps.min.js') }}"></script>
     <script src="{{ asset('/assets/js/persian-date.min.js') }}"></script>
     <script src="{{ asset('/assets/js/persian-datepicker.min.js') }}"></script>
     <script src="{{ asset('/assets/js/dropzone.min.js') }}"></script>
     <script src="{{ asset('/assets/js/tagify.js') }}"></script>
     <script src="{{ asset('/assets/js/tagify.polyfills.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ asset('/assets/js/select2.min.js') }}"></script>
     <script>
         $("#accept_plan").steps({
             headerTag: "h3",
