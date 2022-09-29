@@ -20,6 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('supervisors', SupervisorController::class);
+Route::apiResource('supervisor', SupervisorController::class);
 Route::get('courses', [CourseController::class, 'index'])->name('api.courses.index');
 

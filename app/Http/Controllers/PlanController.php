@@ -34,7 +34,8 @@ class PlanController extends Controller
     public function create()
     {
         $organizations = Organization::all();
-        return view('pages.plans.add', compact('organizations'));
+        $categories = Plan::groupBy('category')->pluck('category');
+        return view('pages.plans.add', compact('organizations','categories'));
     }
 
     /**
@@ -62,7 +63,7 @@ class PlanController extends Controller
         $plan->category = $planInfo['category'];
         $plan->tags = $planInfo['tags'];
         $plan->organization_id = $planInfo['organization'];
-        $plan->distance = $planInfo['distance'];
+//        $plan->distance = $planInfo['distance'];
         $plan->address = $planInfo['address'];
         $plan->implement_method = $planInfo['implement_method'];
         $plan->performer_id = $performer->id;

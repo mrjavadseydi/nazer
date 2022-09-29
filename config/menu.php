@@ -8,6 +8,11 @@ return [
             'permission' => 'dashboard'
         ],
         [
+            'title' => 'تشکیل پرونده',
+            'url' => '/dashboard/plans/create',
+            'permission' => 'create-plan'
+        ],
+        [
             'title' => 'ایمپورت اکسل',
             'url' => '',
             'permission' => 'import',
