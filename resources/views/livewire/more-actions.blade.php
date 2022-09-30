@@ -19,7 +19,15 @@
                 <a href="#" class="navi-link">
                     <button type="button" data-toggle="modal" data-target="#modal-{{ $id  }}">
                         <span class="navi-icon"><i class="la la-user"></i></span>
-                        <span class="navi-text">ویرایش مجری</span>
+                        <span class="navi-text">ویرایش ناظر</span>
+                    </button>
+
+                </a>
+
+                <a href="#" class="navi-link">
+                    <button type="button" >
+                        <span class="navi-icon"><i class="la la-pen"></i></span>
+                        <span class="navi-text">اطلاعات پرونده</span>
                     </button>
                 </a>
             </li>
@@ -32,7 +40,7 @@
         <form action="">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">ویرایش مجری</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">ویرایش ناظر</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <i aria-hidden="true" class="ki ki-close"></i>
                     </button>
@@ -40,11 +48,11 @@
                 <div class="modal-body">
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 10px" class="text-right m-0">
                         <div class="form-group">
-                            <label for="" class="form-label">مجری فعلی</label>
+                            <label for="" class="form-label">ناظر فعلی</label>
                             <input type="text" class="form-control" value="{{ $supervisorFullName }}" disabled>
                         </div>
                         <div class="form-group">
-                            <label for="" class="form-label">مجری جدید</label>
+                            <label for="" class="form-label">ناظر جدید</label>
                             <select name="supervisor" id="" class="form-control" wire:change="saveSupervisor({{ $id }}, $event.target.value)">
                                 <option value=""></option>
                                 @foreach($supervisors as $supervisor)

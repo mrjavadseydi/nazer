@@ -78,6 +78,8 @@ class Plans extends LivewireDatatable
             Column::callback('performers.phone', function ($phone){
                 return "<a href='tel:$phone'>$phone</a>";
             })->label("تلفن همراه")->alignRight()->headerAlignCenter()->filterable(),
+            Column::name('plans.address')->label("آدرس طرح")->alignRight()->headerAlignCenter()->editable()->filterable(),
+
             Column::name('performers.firstName')->label("نام")->alignRight()->headerAlignCenter()->filterable(),
             Column::name('performers.lastName')->label("نام خانوادگی")->alignRight()->headerAlignCenter()->filterable(),
             Column::name('plans.category')->label("گروه فعالیت")->alignRight()->headerAlignCenter(),
@@ -92,7 +94,7 @@ class Plans extends LivewireDatatable
             Column::callback('performers.gender', function ($gender){
                 return $gender == 'male' ? 'مرد' : 'زن';
             })->label("جنیست")->alignRight()->headerAlignCenter(),
-            Column::name('plans.address')->label("آدرس طرح")->alignRight()->headerAlignCenter()->editable()->filterable(),
+            Column::name('plans.description')->label("توضیحات")->alignRight()->headerAlignCenter()->editable()->filterable(),
 //            Column::name('areas.title')->label("محله")->alignRight()->headerAlignCenter(),
             Column::callback(['plans.id', 'plans.area_city_id', 'areas.id'], function ($planID, $planAreaCityID, $areaCityID){
                 return view('livewire.select-editable', [

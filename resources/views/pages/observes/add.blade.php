@@ -607,6 +607,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div style="width: 100%" class="form repeater-default row align-items-center">
+                                    <label for="" class="form-label"><strong>توضیحات</strong></label>
+                                    <textarea name="description" rows="3" class="form-control">{{ $plan->description }}</textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

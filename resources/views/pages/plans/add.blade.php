@@ -103,13 +103,13 @@
                         </div>
                         <section>
                             <div class="row text-right">
-                                <div class="col-4">
+                                <div class="col-6">
                                     <div class="form-group pl-3">
                                         <label for="" class="form-label">عنوان</label>
                                         <input type="text" class="form-control" required name="plan[title]">
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-6">
                                     <div class="form-group px-3">
                                         <label for="" class="form-label">دسته</label>
                                         <select class="form-control" name="plan[category]">
@@ -119,12 +119,12 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-4">
-                                    <div class="form-group pr-3">
-                                        <label for="" class="form-label">برچسب ها</label>
-                                        <input type="text" required class="form-control" name="plan[tags]" id="tagify">
-                                    </div>
-                                </div>
+{{--                                <div class="col-4">--}}
+{{--                                    <div class="form-group pr-3">--}}
+{{--                                        <label for="" class="form-label">برچسب ها</label>--}}
+{{--                                        <input type="text" required class="form-control" name="plan[tags]" id="tagify">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
                                 <div class="col-6">
                                     <div class="form-group pl-3">
                                         <label for="" class="form-label">اداره</label>

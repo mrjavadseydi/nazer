@@ -178,6 +178,10 @@ class PlanController extends Controller
         $plan->distance = $request->distance;
         $plan->latitude = $request->latitude;
         $plan->longitude = $request->longitude;
+        if ($request->filled('description')){
+            $plan->description = $request->description;
+
+        }
         if( $request->is_special == 'yes' ){
             $plan->is_special = true;
             $plan->special_reason = $request->special_reason;
