@@ -203,6 +203,8 @@ class PlanController extends Controller
         $observe->supervisor_id = Supervisor::where('nationalityCode', Auth::user()->nationalityCode)->first()->id;
         $observe->performer_id = $plan->performer->id;
         $observe->plan_id = $plan->id;
+        $observe->on_bpms = $request->on_bpms==1?true:false;
+
         $observe->observe_date = $date;
         $observe->save();
 

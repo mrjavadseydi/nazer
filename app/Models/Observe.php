@@ -13,7 +13,7 @@ use Illuminate\Database\Query\Builder;
 class Observe extends Model
 {
     use HasFactory;
-
+    protected $guarded;
     public function plan()
     {
         return $this->belongsTo(Plan::class);

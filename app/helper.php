@@ -92,3 +92,13 @@ if( !function_exists('get_excerpt_fullName') ){
         $lastSplitWord = $splitWords[count($splitWords) - 1];
     }
 }
+
+if (!function_exists('on_bpms')){
+    function on_bpms($id){
+        $last_observ = \App\Models\Observe::where('plan_id',$id)->orderBy('id','desc')->first();
+        if ($last_observ){
+            return $last_observ->on_bpms;
+        }
+        return false;
+    }
+}
