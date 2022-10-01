@@ -64,8 +64,8 @@ class Observes extends LivewireDatatable
             Column::name('performer.nationalityCode')->label('کد ملی مجری')->alignRight()->headerAlignCenter(),
             Column::name('performer.phone')->label('تلفن تماس مجری')->alignRight()->headerAlignCenter(),
             Column::name('supervisor.fullName')->label('ناظر')->alignRight()->headerAlignCenter(),
-            Column::callback('observes.on_bpms',function ($data){
-                return $data==true?"ثبت شده":"عدم ثبت";
+            Column::callback(['observes.id'],function ($data){
+                return view('livewire.observer-datatable', ['id' => $data]);
             })->label('ثبت در bpms')->alignRight()->headerAlignCenter(),
 
             Column::callback('observes.observe_date', function ($date){

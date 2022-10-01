@@ -1,0 +1,1 @@
+<livewire:update-bpms-status :observer_id="$id" :key="$id" />

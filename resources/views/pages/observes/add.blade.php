@@ -718,24 +718,7 @@
                                                   class="form-control">{{ $plan->description }}</textarea>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <label for="" class="form-label"><strong>ثبت شده در bpms</strong></label>
-                                    <div style="width: 100%" class="form repeater-default row align-items-center">
-                                        <div class="radio-inline" id="is_insured">
 
-                                            <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                                <input type="radio" name="on_bpms" value="1" {{on_bpms($plan->id)?"checked":""}} />
-                                                <span class="mr-0 ml-2"></span>
-                                                ثبت شده
-                                            </label>
-                                            <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                                <input type="radio" name="on_bpms" value="0" {{on_bpms($plan->id)?"":"checked"}}/>
-                                                <span class="mr-0 ml-2"></span>
-                                                عدم ثبت
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
