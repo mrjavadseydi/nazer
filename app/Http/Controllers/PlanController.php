@@ -54,6 +54,9 @@ class PlanController extends Controller
         $performer->nationalityCode = $performerInfo['nationalityCode'];
         $performer->birthday = $performerInfo['birthday'];
         $performer->phone = $performerInfo['phone'];
+        if ($request->filled('second_number')){
+            $performer->second_number = $performerInfo['second_number'];
+        }
         $performer->gender = $performerInfo['gender'];
         $performer->under_support = $performerInfo['support'] == 'on';
         $performer->save();

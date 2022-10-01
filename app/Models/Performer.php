@@ -13,7 +13,7 @@ use Illuminate\Database\Query\Builder;
 class Performer extends Model
 {
     use HasFactory;
-
+    protected $guarded = [];
     public function plans()
     {
         return $this->hasMany(Plan::class);

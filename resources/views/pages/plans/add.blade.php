@@ -25,42 +25,45 @@
                     <div class="tab-content m-0 mt-4 p-0">
 
                         @csrf
-                        <div class="text-right">
-                            <h3>اطلاعات فردی</h3>
-                        </div>
                         <section>
                             <div class="row text-right">
-                                <div class="col-4">
+                                <div class="col-md-4 col-sm-12">
                                     <div class="form-group pl-3">
                                         <label for="" class="form-label">نام</label>
                                         <input type="text" required class="form-control" name="performer[firstName]">
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4 col-sm-12">
                                     <div class="form-group px-3">
                                         <label for="" class="form-label">نام خانوادگی</label>
                                         <input type="text" required class="form-control" name="performer[lastName]">
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4 col-sm-12">
                                     <div class="form-group pr-3">
                                         <label for="" class="form-label">کد ملی</label>
                                         <input type="text" required class="form-control" name="performer[nationalityCode]">
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4 col-sm-12">
                                     <div class="form-group pl-3">
                                         <label for="" class="form-label">تاریخ تولد</label>
                                         <input type="text" required class="form-control persianDate" name="performer[birthday]">
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4 col-sm-12">
                                     <div class="form-group px-3">
                                         <label for="" class="form-label">شماره تلفن</label>
                                         <input type="text" required class="form-control" name="performer[phone]">
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4 col-sm-12">
+                                    <div class="form-group px-3">
+                                        <label for="" class="form-label"> شماره تلفن ضروری </label>
+                                        <input type="text" class="form-control" name="performer[second_number]">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12">
                                     <div class="form-group pr-3">
                                         <label for="" class="form-label">جنسیت</label>
                                         <div class="radio-inline">
@@ -78,7 +81,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4 col-sm-12">
                                     <div class="form-group pl-3">
                                         <label for="" class="form-label">تحت پوشش کمیته امداد</label>
                                         <div class="radio-inline">
@@ -97,19 +100,16 @@
                                 </div>
                             </div>
                         </section>
-                        <div class="text-right">
-                            <h3>اطلاعات طرح</h3>
 
-                        </div>
                         <section>
                             <div class="row text-right">
-                                <div class="col-6">
+                                <div class="col-md-6 col-sm-12">
                                     <div class="form-group pl-3">
                                         <label for="" class="form-label">عنوان</label>
                                         <input type="text" class="form-control" required name="plan[title]">
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-md-6 col-sm-12">
                                     <div class="form-group px-3">
                                         <label for="" class="form-label">دسته</label>
                                         <select class="form-control" name="plan[category]">
@@ -125,7 +125,7 @@
 {{--                                        <input type="text" required class="form-control" name="plan[tags]" id="tagify">--}}
 {{--                                    </div>--}}
 {{--                                </div>--}}
-                                <div class="col-6">
+                                <div class="col-md-6 col-sm-12">
                                     <div class="form-group pl-3">
                                         <label for="" class="form-label">اداره</label>
                                         <select class="form-control" name="plan[organization]">
@@ -135,7 +135,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-md-6 col-sm-12">
                                     <div class="form-group px-3">
                                         <label for="" class="form-label">نوع طرح</label>
                                         <div class="radio-inline">
@@ -161,13 +161,10 @@
                                 </div>
                             </div>
                         </section>
-                        <div class="text-right">
-                            <h3>ارجاع به کارشناس فنی</h3>
 
-                        </div>
                         <section>
                             <div class="row text-right">
-                                <div class="col-4">
+                                <div class="col-md-6 col-sm-12">
                                     <div class="form-group pl-3">
                                         <label for="" class="form-label">کارشناس فنی (ناظر)</label>
                                         <select required class="custom-select form-control select2-generate" id="supervisors"

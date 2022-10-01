@@ -107,6 +107,12 @@
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group">
+                            <label for="" class="form-label">تلفن ضروری:
+                                <strong>{{ $plan->performer->second_phone }}</strong></label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="form-group">
                             <label for="" class="form-label">جنسیت:
                                 <strong>{{ $plan->performer->gender ? ($plan->performer->gender == 'male' ? 'مرد' : 'زن') : '-' }}</strong></label>
                         </div>
