@@ -52,6 +52,12 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-12">
+                                    <div class="form-group pl-3">
+                                        <label for="" class="form-label">تاریخ اجرا</label>
+                                        <input type="text" required class="form-control persianDate" name="performer[start_date]">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12">
                                     <div class="form-group px-3">
                                         <label for="" class="form-label">شماره تلفن</label>
                                         <input type="text" required class="form-control" name="performer[phone]">
@@ -96,6 +102,22 @@
                                                 خیر
                                             </label>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group px-3">
+                                        <label for="" class="form-label">سطح فعالیت</label>
+                                        <select class="form-control" name="plan[level]">
+                                            <option>
+                                                خودکفايي
+                                            </option>
+                                            <option>
+                                                توان افزایی
+                                            </option>
+                                            <option>
+                                               کار انگیزی
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

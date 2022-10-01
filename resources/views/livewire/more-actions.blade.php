@@ -24,12 +24,13 @@
 
                 </a>
 
-                <a href="#" class="navi-link">
+                <a href="{{route('physicalDocument.edit',$id)}}" class="navi-link">
                     <button type="button" >
                         <span class="navi-icon"><i class="la la-pen"></i></span>
                         <span class="navi-text">اطلاعات پرونده</span>
                     </button>
                 </a>
+
             </li>
         </ul>
     </div>

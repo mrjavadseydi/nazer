@@ -53,6 +53,7 @@ class PlanController extends Controller
         $performer->lastName = $performerInfo['lastName'];
         $performer->nationalityCode = $performerInfo['nationalityCode'];
         $performer->birthday = $performerInfo['birthday'];
+
         $performer->phone = $performerInfo['phone'];
         if ($request->filled('second_number')){
             $performer->second_number = $performerInfo['second_number'];
@@ -64,9 +65,11 @@ class PlanController extends Controller
         $plan = new Plan();
         $plan->title = $planInfo['title'];
         $plan->category = $planInfo['category'];
-        $plan->tags = $planInfo['tags'];
+//        $plan->tags = $planInfo['tags'];
         $plan->organization_id = $planInfo['organization'];
 //        $plan->distance = $planInfo['distance'];
+        $plan->start_date = shamsi2miladi('Y/m/d',fa2en($performerInfo['start_date']));
+        $plan->level = $planInfo['level'];
         $plan->address = $planInfo['address'];
         $plan->implement_method = $planInfo['implement_method'];
         $plan->performer_id = $performer->id;

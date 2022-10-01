@@ -8,6 +8,7 @@ use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\ObserveController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\PhysicalDocument;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SuggestController;
 use App\Http\Controllers\SupervisorController;
@@ -41,6 +42,7 @@ Route::prefix('/')->middleware('guest')->group(function (){
 Route::prefix('dashboard')->middleware('auth')->group(function (){
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/plans', PlanController::class);
+    Route::resource('/physicalDocument',PhysicalDocument::class)->except('index','show','store','create','destroy');
     Route::resource('/documents', DocumentController::class);
     Route::resource('/organizations', OrganizationController::class);
     Route::resource('/supervisors', SupervisorController::class);

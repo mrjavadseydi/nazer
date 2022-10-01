@@ -102,3 +102,8 @@ if (!function_exists('on_bpms')){
         return false;
     }
 }
+if (!function_exists('item_value')){
+    function item_value($plan_id,$item_id){
+        return \App\Models\PhysicalItemValue::where('plan_id',$plan_id)->where('physical_items_id',$item_id)->first()->value??null;
+    }
+}
