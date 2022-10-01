@@ -1,7 +1,6 @@
 <div>
-    @if($bpms->on_bpms)
-        <p>
-            ثبت شده توسط :
+@if($bpms->on_bpms)
+        <p @if(auth()->user()->isAdmin) wire:click="updateStatus" @endif  >
             @if($user= \App\Models\User::where('id',$bpms->bpms_update_user)->first())
                 {{$user->firstName . " " . $user->lastName}}
             @else

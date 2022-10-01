@@ -15,7 +15,7 @@ class UpdateBpmsStatus extends Component
     public function updateStatus(){
         $this->bpms->update([
             'bpms_update_user' => auth()->user()->id,
-            'on_bpms' => true
+            'on_bpms' => $this->bpms->on_bpms == 1 ? 0 : 1
         ]);
     }
     public function render()
