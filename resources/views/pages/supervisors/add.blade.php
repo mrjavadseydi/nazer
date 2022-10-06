@@ -13,8 +13,14 @@
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label for="" class="form-label">نام و نام خانوادگی</label>
-                                <input type="text" class="form-control" name="fullName" @isset($supervisor) value="{{ $supervisor->fullName }}" @endisset>
+                                <label for="" class="form-label">نام </label>
+                                <input type="text" class="form-control" name="firstName" @isset($supervisor) value="{{ $supervisor->fullName }}" @endisset>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="" class="form-label"> نام خانوادگی</label>
+                                <input type="text" class="form-control" name="lastName" @isset($supervisor) value="{{ $supervisor->fullName }}" @endisset>
                             </div>
                         </div>
 
@@ -24,15 +30,16 @@
                                 <input type="text" class="form-control" name="phone" @isset($supervisor) value="{{ $supervisor->phone }}" @endisset>
                             </div>
                         </div>
-
-                        <div class="col-lg-4">
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="" class="form-label">کد ملی</label>
                                 <input type="text" class="form-control" name="nationalityCode" @isset($supervisor) value="{{ $supervisor->nationalityCode }}" @endisset>
                             </div>
                         </div>
 
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="" class="form-label">رمز عبور</label>
                                 <div class="input-group">
@@ -46,11 +53,10 @@
                                         </button>
                                     </div>
                                 </div>
-                                <p class="text-danger m-0 mt-3">در صورتی که رمز عبور وارد شده بیش از 8 کاراکتر باشد، رمز عبور شما تغییر خواهد کرد</p>
                             </div>
                         </div>
 
-                        <div class="col-lg-8">
+                        <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="" class="form-label">آدرس</label>
                                 <input type="text" class="form-control" name="address" @isset($supervisor) value="{{ $supervisor->address }}" @endisset>

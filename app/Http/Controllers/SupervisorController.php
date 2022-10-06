@@ -34,14 +34,15 @@ class SupervisorController extends Controller
     public function store(Request $request)
     {
         $supervisor = new Supervisor();
-        $supervisor->fullName = $request->fullName;
+        $supervisor->fullName = $request->firstName ." ". $request->lastName;
         $supervisor->phone = $request->phone;
         $supervisor->nationalityCode = $request->nationalityCode;
         $supervisor->address = $request->address;
         $supervisor->save();
 
         $user = new User();
-        $user->firstName = $request->fullName;
+        $user->firstName = $request->firstName;
+        $user->lastName = $request->lastName;
         $user->phone = $request->phone;
         $user->nationalityCode = $request->nationalityCode;
         $user->password = bcrypt($request->password);

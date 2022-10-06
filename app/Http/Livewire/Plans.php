@@ -75,13 +75,14 @@ class Plans extends LivewireDatatable
             })->label('#')->alignRight()->headerAlignCenter(),
             Column::name('organizations.title')->label("اداره")->alignRight()->headerAlignCenter(),
             Column::name('performers.nationalityCode')->label("کد ملی")->alignRight()->headerAlignCenter()->filterable(),
+
+            Column::name('performers.firstName')->label("نام")->alignRight()->headerAlignCenter()->filterable(),
+            Column::name('performers.lastName')->label("نام خانوادگی")->alignRight()->headerAlignCenter()->filterable(),
             Column::callback('performers.phone', function ($phone){
                 return "<a href='tel:$phone'>$phone</a>";
             })->label("تلفن همراه")->alignRight()->headerAlignCenter()->filterable(),
             Column::name('plans.address')->label("آدرس طرح")->alignRight()->headerAlignCenter()->editable()->filterable(),
 
-            Column::name('performers.firstName')->label("نام")->alignRight()->headerAlignCenter()->filterable(),
-            Column::name('performers.lastName')->label("نام خانوادگی")->alignRight()->headerAlignCenter()->filterable(),
             Column::name('plans.category')->label("گروه فعالیت")->alignRight()->headerAlignCenter(),
             Column::name('plans.level')->label("سطح فعالیت")->alignRight()->headerAlignCenter(),
             Column::name('plans.status')->label("وضعیت فعالیت")->alignRight()->headerAlignCenter(),

@@ -83,22 +83,13 @@
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group">
-                            <label for="" class="form-label">نام:
-                                <strong>{{ $plan->performer->firstName }}</strong></label>
+                            <label for="" class="form-label">نام و نام خانوادگی:
+                                <strong>{{ $plan->performer->firstName }}
+                                    {{ $plan->performer->lastName }}
+                                </strong></label>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="form-group">
-                            <label for="" class="form-label">نام خانوادگی:
-                                <strong>{{ $plan->performer->lastName }}</strong></label>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="form-group">
-                            <label for="" class="form-label">تاریخ تولد:
-                                <strong>{{ $plan->performer->birthday }}</strong></label>
-                        </div>
-                    </div>
+
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group">
                             <label for="" class="form-label">تلفن:
@@ -111,12 +102,7 @@
                                 <strong>{{ $plan->performer->second_phone }}</strong></label>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="form-group">
-                            <label for="" class="form-label">جنسیت:
-                                <strong>{{ $plan->performer->gender ? ($plan->performer->gender == 'male' ? 'مرد' : 'زن') : '-' }}</strong></label>
-                        </div>
-                    </div>
+
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group">
                             <label for="" class="form-label">تحت پوشش کمیته امداد:
@@ -125,9 +111,11 @@
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group">
-                            <label for="" class="form-label">محله: @if(!is_null($plan->areaCity))
+                            <label for="" class="form-label">محله:
+                                @if(!is_null($plan->areaCity))
                                     <strong>{{ $plan->areaCity->area->title }}</strong>
-                                @endif</label>
+                                @endif
+                            </label>
                         </div>
                     </div>
 
