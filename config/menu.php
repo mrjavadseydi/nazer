@@ -133,6 +133,11 @@ return [
             'separator' => true,
         ],
         [
+            'title' => 'گزارش فرم ۱۲ و ۱۳',
+            'url' => '/dashboard/report/13',
+            'icon' => 'flaticon2-bell-2'
+        ],
+        [
             'title' => 'گزارش استانی',
             'url' => '/',
             'icon' => 'flaticon2-bell-2'

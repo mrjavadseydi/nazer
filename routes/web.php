@@ -10,10 +10,12 @@ use App\Http\Controllers\ObserveController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PhysicalDocument;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\Report13Controller as Report13ControllerAlias;
 use App\Http\Controllers\SuggestController;
 use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
@@ -86,6 +88,17 @@ Route::prefix('dashboard')->middleware('auth')->group(function (){
     });
 
     Route::get('/logout', [AuthController::class, 'logout']);
+    
+    Route::get('report/13', Report13ControllerAlias::class)->name('report.13');
+    Route::get('/remove_cache', function (){
+        if (!auth()->user()->isAdmin)
+            abort(403);
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('config:cache');
+        Artisan::call('view:clear');
+        return redirect()->back();
+    })->name('remove-cache');
 });
 
 Route::post('/upload', function (Request $request){

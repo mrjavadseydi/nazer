@@ -22,7 +22,8 @@
         <div class="card card-custom gutter-b">
             <!--begin::Body-->
             <div class="card-header align-items-center">
-                <h3 class="card-title">اطلاعات مجری</h3>
+                <h3 class="card-title text-right">طرح :
+                    {{$plan->title }}</h3>
                 {{--                <button id="showOnMap" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">--}}
                 {{--                    مشاهده روی نقشه--}}
                 {{--                </button>--}}
@@ -104,6 +105,17 @@
                                                {{$input->required?"required":""}} value="{{item_value($plan->id,$input->id)}}"
                                                class="form-control  mb-8"
                                                name="{{$input->name}}">
+                                    </div>
+                                </div>
+                            @elseif($input->type=="textarea")
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div style="width: 100%" class="form repeater-default row align-items-center">
+                                            <label for="" class="form-label"><strong>{{$input->title}}</strong></label>
+                                            <textarea {{$input->required?"required":""}} name="{{$input->name}}"
+                                                      rows="3"
+                                                      class="form-control">{{item_value($plan->id,$input->id)}}</textarea>
+                                        </div>
                                     </div>
                                 </div>
                             @elseif($input->type=='bool')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Image;
 use App\Models\Observe;
 use App\Models\Plan;
 use App\Models\Supervisor;
@@ -71,6 +72,10 @@ class Observes extends LivewireDatatable
             Column::callback('observes.observe_date', function ($date){
                 return miladi2shamsi('Y/m/d H:i', $date);
             })->label('تاریخ بازدید')->alignRight()->headerAlignCenter(),
+            Column::name('plan.distance')->label('فاصله')->alignRight()->headerAlignCenter(),
+            Column::callback('observes.plan_id', function ($date){
+                return Image::where([['plan_id', $date], ['document_id', '2']])->count()==1 ? "دارد":"ندارد";
+            })->label('مجوز')->alignRight()->headerAlignCenter(),
             Column::callback(['id'], function ($observeID){
                 $planID = Observe::find($observeID)->load('plan')->plan->id;
                 $buttonName = 'مشاهده';

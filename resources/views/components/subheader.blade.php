@@ -47,6 +47,15 @@
                                 @endif
                             @endisset
                         @endforeach
+                        @if(auth()->user()->isAdmin)
+                                <li class="navi-item">
+                                    <a href="{{route('remove-cache') }}" class="navi-link text-right">
+
+                                        <span class="navi-text text-right">پاک سازی کش</span>
+                                    </a>
+                                </li>
+                        @endif
+
                     </ul>
                     <!--end::Navigation-->
                 </div>

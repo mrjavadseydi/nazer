@@ -68,7 +68,8 @@
         <div class="card card-custom gutter-b">
             <!--begin::Body-->
             <div class="card-header align-items-center">
-                <h3 class="card-title">اطلاعات مجری</h3>
+                <h3 class="card-title text-right">طرح :
+                    {{$plan->title }}</h3>
                 {{--                <button id="showOnMap" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">--}}
                 {{--                    مشاهده روی نقشه--}}
                 {{--                </button>--}}
