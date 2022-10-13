@@ -193,7 +193,7 @@
                                 <label for="" class="form-label"><strong>فاصله اداره تا موقعیت طرح (برحسب
                                         کیلومتر)</strong></label>
                                 <div class="d-flex">
-                                    <input type="text" class="form-control" id="distance" name="distance"
+                                    <input type="number" inputmode="numeric" class="form-control" id="distance" name="distance"
                                            value="{{ $plan->distance }}">
                                     <button class="btn btn-primary mr-4" type="button" id="calcDistance"
                                             onclick="calculateDistance(this)" data-p1-lat="{{ $plan->latitude }}"

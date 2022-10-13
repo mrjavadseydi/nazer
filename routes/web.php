@@ -18,7 +18,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
-use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +32,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 Route::redirect('/', '/login');
 
-Route::prefix('/')->middleware('guest')->group(function (){
+Route::prefix('/')->middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/signIn', [AuthController::class, 'signIn'])->name('signIn');
     Route::post('/forgot', [AuthController::class, 'forgot'])->middleware('guest')->name('password.request');
@@ -41,10 +40,10 @@ Route::prefix('/')->middleware('guest')->group(function (){
     Route::post('/reset', [AuthController::class, 'reset'])->middleware('guest')->name('reset.post');
 });
 
-Route::prefix('dashboard')->middleware('auth')->group(function (){
+Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/plans', PlanController::class);
-    Route::resource('/physicalDocument',PhysicalDocument::class)->except('index','show','store','create','destroy');
+    Route::resource('/physicalDocument', PhysicalDocument::class)->except('index', 'show', 'store', 'create', 'destroy');
     Route::resource('/documents', DocumentController::class);
     Route::resource('/organizations', OrganizationController::class);
     Route::resource('/supervisors', SupervisorController::class);
@@ -61,7 +60,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function (){
     Route::get('/observes/{id}', [PlanController::class, 'showObserve'])->name('observes.show');
     Route::delete('/observes/{id}', [ObserveController::class, 'destroy'])->name('observes.remove');
 
-    Route::prefix('import')->name('import.')->group(function (){
+    Route::prefix('import')->name('import.')->group(function () {
         Route::get('/plans', [ImportController::class, 'plansForm'])->name('plans.form');
         Route::post('/plans', [ImportController::class, 'plansStore'])->name('plans');
 
@@ -72,25 +71,25 @@ Route::prefix('dashboard')->middleware('auth')->group(function (){
         Route::post('/areas', [ImportController::class, 'areasStore'])->name('areas');
     });
 
-    Route::prefix('export')->name('export.')->group(function (){
+    Route::prefix('export')->name('export.')->group(function () {
         Route::get('/duplicates', [ExportController::class, 'duplicates'])->name('duplicates');
         Route::get('/errors', [ExportController::class, 'errors'])->name('errors');
 
-        Route::prefix('/address')->name('address.')->group(function (){
+        Route::prefix('/address')->name('address.')->group(function () {
             Route::get('/notFounded', [ExportController::class, 'notFounded'])->name('notFounded');
             Route::get('/emptyNationalityCode', [ExportController::class, 'emptyNationalityCode'])->name('emptyNationalityCode');
         });
 
-        Route::prefix('/areas')->name('areas.')->group(function (){
+        Route::prefix('/areas')->name('areas.')->group(function () {
             Route::get('/notFounded', [ExportController::class, 'notFounded'])->name('notFounded');
             Route::get('/emptyNationalityCode', [ExportController::class, 'emptyNationalityCode'])->name('emptyNationalityCode');
         });
     });
 
     Route::get('/logout', [AuthController::class, 'logout']);
-    
+
     Route::get('report/13', Report13ControllerAlias::class)->name('report.13');
-    Route::get('/remove_cache', function (){
+    Route::get('/remove_cache', function () {
         if (!auth()->user()->isAdmin)
             abort(403);
         Artisan::call('cache:clear');
@@ -101,9 +100,65 @@ Route::prefix('dashboard')->middleware('auth')->group(function (){
     })->name('remove-cache');
 });
 
-Route::post('/upload', function (Request $request){
+Route::post('/upload', function (Request $request) {
     foreach ($request->file('image') as $image) {
         $name = Str::uuid();
         $image->move(public_path('uploads'));
     }
 })->name('upload');
+
+Route::get('/test', function () {
+    $files = scandir(public_path('uploads'));
+    $prefix = public_path('uploads') . "/";
+    $types = \App\Models\Document::all();
+    foreach ($files as $file) {
+        if (\App\Models\Image::where('url', $file)->first() || !is_file($prefix . $file))
+            continue;
+
+        $file = $prefix . $file;
+
+        $dateTime = date('Y-m-d H:i:s', filectime($file));
+        $ten_min_before = \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s', $dateTime)->subMinutes(10);
+        $ten_min_later = \Illuminate\Support\Carbon::createFromFormat('Y-m-d H:i:s', $dateTime)->addMinutes(10);
+        $observes = \App\Models\Observe::whereBetween('created_at', [$ten_min_before, $ten_min_later])->get();
+        if (count($observes) > 0) {
+            $ex = explode('/', $file);
+
+
+            $img = asset('uploads/' . end($ex));
+            echo "<img height='250' width='250' src='$img'><br>";
+            foreach ($observes as $observe) {
+                $links = "";
+                foreach ($types as $type) {
+                    if (!\App\Models\Image::where([['plan_id', $observe->plan_id],['document_id',$type->id]])->first()){
+                        $links .= "
+                        <a target='_blank' href='" . \route("setFile", ['file' => end($ex), 'plan' => $observe->plan_id, 'type' => $type->id]) . "'>
+                        $type->title
+                        </a>
+                        |
+                        
+                        ";
+                    }
+
+                }
+                echo "
+                    {$observe->plan->title} | 
+                    $links
+                    
+                    <br>
+                    ";
+            }
+            echo "<hr>";
+        }
+
+    }
+});
+Route::get('setFile/{file}/{plan}/{type}', function ($file, $plan, $type) {
+
+    \App\Models\Image::create([
+        'url' => $file,
+        'document_id' => $type,
+        'plan_id' => $plan
+    ]);
+    return "<script>window.close()</script>";
+})->name('setFile');

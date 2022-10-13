@@ -47,7 +47,7 @@ class PlanImport implements ToCollection
                 $performer = new Performer();
             else{
                 $plan = $performer->plans()->with('organization')->first();
-                $planSupervisor = $plan->supervisor;
+                $planSupervisor = $plan->supervisor ?? Supervisor::find(17);
 
                 $gender = $performer->gender == 'male' ? 'مرد': 'زن';
                 $start_date = $plan->start_date ? en2fa(miladi2shamsi('Y/m/d',$plan->start_date)) : '';
@@ -114,11 +114,11 @@ class PlanImport implements ToCollection
                 }
                 $plan->address = trim($row[10]);
                 $plan->self_sufficiency_status = $sss != '' ? $sss : null;;
-                $plan->implement_method = $implement != '' ? $implement : null;
+                $plan->implement_method = $implement != '' ? $implement : "ثبت نشده";
                 $plan->performer_id = $performer->id;
 
                 if( isset($row[12]) and $row[12] != '' ){
-                    $date = fa2en($row[12]);
+                    $date = fa2en($row[12]."/01/01");
                     $expiration = shamsi2miladi('Y/m/d', $date);
                     $last_observe_date = $expiration->toDate();
                     $plan->last_observe_date = $last_observe_date;
@@ -150,7 +150,7 @@ class PlanImport implements ToCollection
                 $plan->save();
             }
             catch (\Exception $exception){
-                dd($exception);
+                dd($row,$exception);
             }
         }
     }

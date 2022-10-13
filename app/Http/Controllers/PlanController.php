@@ -203,10 +203,13 @@ class PlanController extends Controller
         $plan->save();
 
         $observe = Observe::where('plan_id', $plan->id)->whereDate('observe_date', $stringDate)->first();
-        if( !$observe )
+        $found = true;
+        if( !$observe ){
             $observe = new Observe();
-
-        $observe->supervisor_id = Supervisor::where('nationalityCode', Auth::user()->nationalityCode)->first()->id;
+            $found = false;
+        }
+        if (!$found)
+            $observe->supervisor_id = Supervisor::where('nationalityCode', Auth::user()->nationalityCode)->first()->id;
         $observe->performer_id = $plan->performer->id;
         $observe->plan_id = $plan->id;
         $observe->observe_date = $date;
@@ -215,8 +218,7 @@ class PlanController extends Controller
         foreach ($request->observe_files as $item) {
             $documentID = $item['document'];
             $document = $plan->documents()->find($documentID);
-
-            if( !$document and isset($item['file']) ){
+            if(isset($item['file']) ){
                 $image = new Image();
                 $image->url = upload($item['file']);
                 $image->document_id = $documentID;

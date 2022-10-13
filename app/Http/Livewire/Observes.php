@@ -74,8 +74,11 @@ class Observes extends LivewireDatatable
             })->label('تاریخ بازدید')->alignRight()->headerAlignCenter(),
             Column::name('plan.distance')->label('فاصله')->alignRight()->headerAlignCenter(),
             Column::callback('observes.plan_id', function ($date){
-                return Image::where([['plan_id', $date], ['document_id', '2']])->count()==1 ? "دارد":"ندارد";
+                return Image::where([['plan_id', $date], ['document_id', '2']])->count()==1 ? " &#x2714;":"&#215;";
             })->label('مجوز')->alignRight()->headerAlignCenter(),
+            Column::callback(['observes.plan_id','performer.phone'], function ($date,$phone){
+                return Image::where([['plan_id', $date], ['document_id', '1']])->count()==1 ? " &#x2714;":"&#215;";
+            })->label('تابلو')->alignRight()->headerAlignCenter(),
             Column::callback(['id'], function ($observeID){
                 $planID = Observe::find($observeID)->load('plan')->plan->id;
                 $buttonName = 'مشاهده';

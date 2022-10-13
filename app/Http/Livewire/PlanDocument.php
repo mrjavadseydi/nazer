@@ -35,6 +35,7 @@ class PlanDocument extends Component
 
     public function remove(Document $document, Plan $plan)
     {
+        dd('no');
         $fileURL = $document->image->url;
         $plan->documents()->detach($document->id);
         $document->image()->delete();

@@ -67,7 +67,7 @@ class Plans extends LivewireDatatable
             $supervisors = Supervisor::all();
             return view('livewire.more-actions', compact('id', 'supervisorFullName', 'supervisors'));
         });
-        $extras = [1 => $more, 15 => 'supervisor.fullName:نام ناظر'];
+        $extras = [1 => $more, 13 => 'supervisor.fullName:نام ناظر'];
 
         $columns = [
             NumberColumn::callback('id', function ($id){
@@ -81,22 +81,6 @@ class Plans extends LivewireDatatable
             Column::callback('performers.phone', function ($phone){
                 return "<a href='tel:$phone'>$phone</a>";
             })->label("تلفن همراه")->alignRight()->headerAlignCenter()->filterable(),
-            Column::name('plans.address')->label("آدرس طرح")->alignRight()->headerAlignCenter()->editable()->filterable(),
-
-            Column::name('plans.category')->label("گروه فعالیت")->alignRight()->headerAlignCenter(),
-            Column::name('plans.level')->label("سطح فعالیت")->alignRight()->headerAlignCenter(),
-            Column::name('plans.status')->label("وضعیت فعالیت")->alignRight()->headerAlignCenter(),
-            Column::name('plans.title')->label("عنوان طرح")->alignRight()->headerAlignCenter()->filterable(),
-            Column::callback('plans.start_date', function ($startDate){
-                if( $startDate == '' )
-                    return null;
-                return miladi2shamsi('Y/m/d', $startDate);
-            })->label("تاریخ اجرا")->alignRight()->headerAlignCenter(),
-            Column::callback('performers.gender', function ($gender){
-                return $gender == 'male' ? 'مرد' : 'زن';
-            })->label("جنیست")->alignRight()->headerAlignCenter(),
-            Column::name('plans.description')->label("توضیحات")->alignRight()->headerAlignCenter()->editable()->filterable(),
-//            Column::name('areas.title')->label("محله")->alignRight()->headerAlignCenter(),
             Column::callback(['plans.id', 'plans.area_city_id', 'areas.id'], function ($planID, $planAreaCityID, $areaCityID){
                 return view('livewire.select-editable', [
                     'rowId' => $planID ? $planID : 0,
@@ -106,10 +90,27 @@ class Plans extends LivewireDatatable
                     'options' => AreaCity::All(), // [["id" => , "name" => , ....], ...]
                 ]);
             })->label('محله')->alignRight()->headerAlignCenter(),
-            Column::name('plans.self_sufficiency_status')->label("وضعیت حودکفایی")->alignRight()->headerAlignCenter(),
-            Column::callback('plans.implement_method', function ($method){
-                return substr($method,0 ,4) . '';
-            })->label("نحوه اجرا")->alignRight()->headerAlignCenter(),
+            Column::name('plans.address')->label("آدرس طرح")->alignRight()->headerAlignCenter()->editable()->filterable(),
+
+//            Column::name('plans.category')->label("گروه فعالیت")->alignRight()->headerAlignCenter(),
+//            Column::name('plans.level')->label("سطح فعالیت")->alignRight()->headerAlignCenter(),
+//            Column::name('plans.status')->label("وضعیت فعالیت")->alignRight()->headerAlignCenter(),
+            Column::name('plans.title')->label("عنوان طرح")->alignRight()->headerAlignCenter()->filterable(),
+            Column::callback('plans.start_date', function ($startDate){
+                if( $startDate == '' )
+                    return null;
+                return miladi2shamsi('Y/m/d', $startDate);
+            })->label("تاریخ اجرا")->alignRight()->headerAlignCenter(),
+//            Column::callback('performers.gender', function ($gender){
+//                return $gender == 'male' ? 'مرد' : 'زن';
+//            })->label("جنیست")->alignRight()->headerAlignCenter(),
+            Column::name('plans.description')->label("توضیحات")->alignRight()->headerAlignCenter()->editable()->filterable(),
+//            Column::name('areas.title')->label("محله")->alignRight()->headerAlignCenter(),
+
+//            Column::name('plans.self_sufficiency_status')->label("وضعیت حودکفایی")->alignRight()->headerAlignCenter(),
+//            Column::callback('plans.implement_method', function ($method){
+//                return substr($method,0 ,4) . '';
+//            })->label("نحوه اجرا")->alignRight()->headerAlignCenter(),
             Column::callback('plans.last_observe_date', function ($lastObserveDate){
                 if( $lastObserveDate == '' )
                     return null;
