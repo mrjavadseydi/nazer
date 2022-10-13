@@ -15,10 +15,10 @@ class AddFeildsToPlansTable extends Migration
     {
         Schema::table('plans', function (Blueprint $table) {
             $table->enum('location_type',[
+                'ثبت نشده',
                 'شهری',
-                'روستایی',
-                null
-            ])->default(null);
+                'روستایی'
+            ])->default("ثبت نشده");
 //            $table->bigInteger('')
 
         });

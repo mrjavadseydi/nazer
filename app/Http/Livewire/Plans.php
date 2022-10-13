@@ -91,6 +91,7 @@ class Plans extends LivewireDatatable
                 ]);
             })->label('محله')->alignRight()->headerAlignCenter(),
             Column::name('plans.address')->label("آدرس طرح")->alignRight()->headerAlignCenter()->editable()->filterable(),
+            Column::name('plans.location_type')->label("نوع موقعیت")->alignRight()->headerAlignCenter()->filterable(),
 
 //            Column::name('plans.category')->label("گروه فعالیت")->alignRight()->headerAlignCenter(),
 //            Column::name('plans.level')->label("سطح فعالیت")->alignRight()->headerAlignCenter(),

@@ -73,6 +73,7 @@ class PlanController extends Controller
         $plan->address = $planInfo['address'];
         $plan->implement_method = $planInfo['implement_method'];
         $plan->performer_id = $performer->id;
+        $plan->location_type = $planInfo['location_type'];
         $plan->supervisor_id = Supervisor::where('nationalityCode', $request->supervisor)->first()->id;
         $plan->save();
 
@@ -186,6 +187,10 @@ class PlanController extends Controller
         $plan->longitude = $request->longitude;
         if ($request->filled('description')){
             $plan->description = $request->description;
+
+        }
+        if ($request->filled('location_type')){
+            $plan->location_type = $request->location_type;
 
         }
         if( $request->is_special == 'yes' ){

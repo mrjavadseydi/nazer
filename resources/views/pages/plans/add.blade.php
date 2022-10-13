@@ -87,6 +87,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="col-md-4 col-sm-12">
                                     <div class="form-group pl-3">
                                         <label for="" class="form-label">تحت پوشش کمیته امداد</label>
@@ -171,6 +172,24 @@
                                                 <input type="radio" name="plan[implement_method]" value="راهبری شغلی"/>
                                                 <span class="mr-0 ml-2"></span>
                                                 راهبری شغلی
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12">
+                                    <div class="form-group pr-3">
+                                        <label for="" class="form-label">نوع مکان طرح</label>
+                                        <div class="radio-inline">
+                                            <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                                <input  type="radio" name="plan[location_type]" checked="checked"
+                                                        value="شهری"/>
+                                                <span class="mr-0 ml-2"></span>
+                                                شهری
+                                            </label>
+                                            <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                                <input type="radio" name="plan[location_type]" value="روستایی"/>
+                                                <span class="mr-0 ml-2"></span>
+                                                روستایی
                                             </label>
                                         </div>
                                     </div>

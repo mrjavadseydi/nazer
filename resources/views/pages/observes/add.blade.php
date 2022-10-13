@@ -193,7 +193,8 @@
                                 <label for="" class="form-label"><strong>فاصله اداره تا موقعیت طرح (برحسب
                                         کیلومتر)</strong></label>
                                 <div class="d-flex">
-                                    <input type="number" inputmode="numeric" class="form-control" id="distance" name="distance"
+                                    <input type="number" inputmode="numeric" class="form-control" id="distance"
+                                           name="distance"
                                            value="{{ $plan->distance }}">
                                     <button class="btn btn-primary mr-4" type="button" id="calcDistance"
                                             onclick="calculateDistance(this)" data-p1-lat="{{ $plan->latitude }}"
@@ -303,6 +304,26 @@
                                 </div>
                             </div>
                         </div>
+                        @if($plan->location_type=="ثبت نشده")
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group ">
+                                    <label for="" class="form-label">نوع مکان طرح</label>
+                                    <div class="radio-inline">
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="location_type" checked="checked"
+                                                   value="شهری"/>
+                                            <span class="mr-0 ml-2"></span>
+                                            شهری
+                                        </label>
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="location_type" value="روستایی"/>
+                                            <span class="mr-0 ml-2"></span>
+                                            روستایی
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <div class="col-lg-4 col-sm-6" @if( !$plan->is_exhibition ) style="display: none"
                              @endif data-exhibition-level>
                             <div class="form-group">
@@ -705,6 +726,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-lg-12">
                                 <div class="row">
                                     <div style="width: 100%" class="form repeater-default row align-items-center">
