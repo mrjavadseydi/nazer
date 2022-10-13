@@ -64,6 +64,9 @@ class Observes extends LivewireDatatable
             Column::name('performer.lastName')->label('نام خانوادگی مجری')->alignRight()->headerAlignCenter(),
             Column::name('performer.nationalityCode')->label('کد ملی مجری')->alignRight()->headerAlignCenter(),
             Column::name('performer.phone')->label('تلفن تماس مجری')->alignRight()->headerAlignCenter(),
+            Column::callback('plan.start_date', function ($data){
+                return miladi2shamsi('Y',$data);
+            })->label('سال اجرا')->alignRight()->headerAlignCenter(),
             Column::name('supervisor.fullName')->label('ناظر')->alignRight()->headerAlignCenter(),
             Column::callback(['observes.id'],function ($data){
                 return view('livewire.observer-datatable', ['id' => $data]);
@@ -73,15 +76,15 @@ class Observes extends LivewireDatatable
                 return miladi2shamsi('Y/m/d H:i', $date);
             })->label('تاریخ بازدید')->alignRight()->headerAlignCenter(),
             Column::name('plan.distance')->label('فاصله')->alignRight()->headerAlignCenter(),
-            Column::callback('monthly_charge', function ($data){
-                return number_format((int)$data);
-            })->label('هزینه اجرایی ماهانه')->alignRight()->headerAlignCenter(),
-            Column::callback('monthly_income', function ($data){
-                return number_format((int)$data);
-            })->label('درامد خالص ماهانه')->alignRight()->headerAlignCenter(),
-            Column::callback('net_worth', function ($data){
-                return number_format((int)$data);
-            })->label('ارزش سرمایه فعلی')->alignRight()->headerAlignCenter(),
+//            Column::callback('monthly_charge', function ($data){
+//                return number_format((int)$data);
+//            })->label('هزینه اجرایی ماهانه')->alignRight()->headerAlignCenter(),
+//            Column::callback('monthly_income', function ($data){
+//                return number_format((int)$data);
+//            })->label('درامد خالص ماهانه')->alignRight()->headerAlignCenter(),
+//            Column::callback('net_worth', function ($data){
+//                return number_format((int)$data);
+//            })->label('ارزش سرمایه فعلی')->alignRight()->headerAlignCenter(),
             Column::callback('observes.plan_id', function ($date){
                 return Image::where([['plan_id', $date], ['document_id', '2']])->count()==1 ? " &#x2714;":"&#215;";
             })->label('مجوز')->alignRight()->headerAlignCenter(),
