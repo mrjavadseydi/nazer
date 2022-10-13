@@ -73,6 +73,15 @@ class Observes extends LivewireDatatable
                 return miladi2shamsi('Y/m/d H:i', $date);
             })->label('تاریخ بازدید')->alignRight()->headerAlignCenter(),
             Column::name('plan.distance')->label('فاصله')->alignRight()->headerAlignCenter(),
+            Column::callback('monthly_charge', function ($data){
+                return number_format((int)$data);
+            })->label('هزینه اجرایی ماهانه')->alignRight()->headerAlignCenter(),
+            Column::callback('monthly_income', function ($data){
+                return number_format((int)$data);
+            })->label('درامد خالص ماهانه')->alignRight()->headerAlignCenter(),
+            Column::callback('net_worth', function ($data){
+                return number_format((int)$data);
+            })->label('ارزش سرمایه فعلی')->alignRight()->headerAlignCenter(),
             Column::callback('observes.plan_id', function ($date){
                 return Image::where([['plan_id', $date], ['document_id', '2']])->count()==1 ? " &#x2714;":"&#215;";
             })->label('مجوز')->alignRight()->headerAlignCenter(),

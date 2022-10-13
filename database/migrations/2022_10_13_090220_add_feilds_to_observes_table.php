@@ -14,7 +14,9 @@ class AddFeildsToObservesTable extends Migration
     public function up()
     {
         Schema::table('observes', function (Blueprint $table) {
-            //
+            $table->bigInteger('monthly_charge')->nullable();
+            $table->bigInteger('monthly_income')->nullable();
+            $table->bigInteger('net_worth')->nullable();
         });
     }
 
@@ -26,9 +28,7 @@ class AddFeildsToObservesTable extends Migration
     public function down()
     {
         Schema::table('observes', function (Blueprint $table) {
-            $table->bigInteger('monthly_charge')->nullable();
-            $table->bigInteger('monthly_income')->nullable();
-            $table->bigInteger('net_worth')->nullable();
+
         });
     }
 }

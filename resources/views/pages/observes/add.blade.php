@@ -211,7 +211,47 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="form-label"><strong>هزینه اجرایی ماهانه
+                                    </strong>
+                                    (
+                                    <span id="monthly_charge"></span>
+                                    ریال)
 
+                                </label>
+                                <input type="number" required step="10000000" class="form-control  mb-8"
+                                       inputmode="numeric" min="0" name="monthly_charge"
+                                       value="{{last_observe_value($plan->id,"monthly_charge")}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="form-label"><strong>درامد خالص ماهانه
+                                    </strong>
+                                    (
+                                    <span id="monthly_income"></span>
+                                    ریال)
+                                </label>
+                                <input type="number" required step="10000000" class="form-control  mb-8"
+                                       inputmode="numeric" min="0" name="monthly_income"
+                                       value="{{last_observe_value($plan->id,"monthly_income")}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="form-label"><strong>ارزش سرمایه فعلی
+                                    </strong>
+                                    (
+                                    <span id="net_worth"></span>
+                                    ریال)
+                                </label>
+                                <input type="number" required step="10000000" class="form-control  mb-8"
+                                       inputmode="numeric" min="0" name="net_worth"
+                                       value="{{last_observe_value($plan->id,"net_worth")}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6"></div>
                         <div class="col-lg-4 col-sm-6">
                             <div class="form-group">
                                 <label for="" class="form-label"><strong>نیاز به آموزش</strong></label>
@@ -773,7 +813,43 @@
     <script src="{{ asset('/assets/js/compressor.min.js') }}"></script>
     <script src="{{ asset('/assets/js/leaflet.js') }}"></script>
     <script src="{{ asset('/assets/js/leaflet-routing-machine.js') }}"></script>
+    <script src="{{ asset('/assets/js/num2persian.js') }}"></script>
     <script>
+        let net_worth_inp = document.getElementsByName('net_worth')[0];
+        if (net_worth_inp.value > 0) {
+            document.getElementById('net_worth').innerText = (net_worth_inp.value).num2persian();
+        }
+
+
+        let monthly_charge = document.getElementsByName('monthly_charge')[0];
+        if (monthly_charge.value > 0) {
+            document.getElementById('monthly_charge').innerText = (monthly_charge.value).num2persian();
+        }
+
+
+        let monthly_income = document.getElementsByName('monthly_income')[0];
+        if (net_worth_inp.value > 0) {
+            document.getElementById('monthly_income').innerText = (monthly_income.value).num2persian();
+        }
+        monthly_income.addEventListener('change', function (e) {
+            document.getElementById('monthly_income').innerText = (e.target.value).num2persian();
+        });
+        net_worth_inp.addEventListener('change', function (e) {
+            document.getElementById('net_worth').innerText = (e.target.value).num2persian();
+        });
+        monthly_charge.addEventListener('change', function (e) {
+            document.getElementById('monthly_charge').innerText = (e.target.value).num2persian();
+        });
+        monthly_income.addEventListener('keyup', function (e) {
+            document.getElementById('monthly_income').innerText = (e.target.value).num2persian();
+        });
+        net_worth_inp.addEventListener('keyup', function (e) {
+            document.getElementById('net_worth').innerText = (e.target.value).num2persian();
+        });
+        monthly_charge.addEventListener('keyup', function (e) {
+            document.getElementById('monthly_charge').innerText = (e.target.value).num2persian();
+        });
+
         document.querySelectorAll('[data-remove]').forEach(item => {
             item.addEventListener('click', e => {
                 e.preventDefault();

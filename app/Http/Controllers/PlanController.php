@@ -218,6 +218,10 @@ class PlanController extends Controller
         $observe->performer_id = $plan->performer->id;
         $observe->plan_id = $plan->id;
         $observe->observe_date = $date;
+        $observe->monthly_charge = $request->monthly_charge;
+        $observe->monthly_income = $request->monthly_income;
+        $observe->net_worth  = $request->net_worth;
+
         $observe->save();
 
         foreach ($request->observe_files as $item) {

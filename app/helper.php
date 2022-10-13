@@ -107,3 +107,8 @@ if (!function_exists('item_value')){
         return \App\Models\PhysicalItemValue::where('plan_id',$plan_id)->where('physical_items_id',$item_id)->first()->value??null;
     }
 }
+if (!function_exists('last_observe_value')){
+    function last_observe_value($plan_id,$type){
+        return \App\Models\Observe::where('plan_id',$plan_id)->orderBy('id','desc')->first()[$type]??0;
+    }
+}
