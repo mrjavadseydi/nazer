@@ -42,7 +42,11 @@ class PlanImport implements ToCollection
             /**
              * if performer exists in database then update it else store it
              */
+
             $performer = Performer::with('plans')->where('nationalityCode', $row[1])->first();
+            if ($performer){
+                continue;
+            }
             if( !$performer )
                 $performer = new Performer();
             else{
@@ -82,7 +86,8 @@ class PlanImport implements ToCollection
             $performer->nationalityCode = $row[1] == '' ? 0 : $row[1];
             $performer->firstName = $row[2];
             $performer->lastName = $row[3];
-            $performer->gender = $row[9] == 'مرد' ? 'male' : 'female';
+            $performer->gender =  'male';
+//            $performer->gender = $row[9] == 'مرد' ? 'male' : 'female';
             $performer->phone = $row[11];
             $performer->save();
 
@@ -98,6 +103,8 @@ class PlanImport implements ToCollection
                  * if performer's plan not exists then create it else update it.
                  */
 //                $plan = $performer->plans()->first();
+                if ($plan)
+                    continue;
                 if( !$plan )
                     $plan = new Plan();
 
@@ -114,7 +121,7 @@ class PlanImport implements ToCollection
                 }
                 $plan->address = trim($row[10]);
                 $plan->self_sufficiency_status = $sss != '' ? $sss : null;;
-                $plan->implement_method = $implement != '' ? $implement : "ثبت نشده";
+                $plan->implement_method = $implement != '' ? $implement : "هدایت شغلی";
                 $plan->performer_id = $performer->id;
 
                 if( isset($row[12]) and $row[12] != '' ){
@@ -128,25 +135,25 @@ class PlanImport implements ToCollection
                      * assign supervisor to plan
                      */
 //                    $planSupervisor = $plan->supervisor;
-                    $excelSupervisorInSystem = Supervisor::where('nationalityCode', $row[16])->first();
-
-                    if( !$planSupervisor and !$excelSupervisorInSystem )
-                        $supervisor = new Supervisor();
-
-                    if( $planSupervisor and $excelSupervisorInSystem )
-                        $supervisor = $excelSupervisorInSystem;
-
-                    if( !$planSupervisor and $excelSupervisorInSystem )
-                        $supervisor = $excelSupervisorInSystem;
-
-                    if( $planSupervisor and !$excelSupervisorInSystem )
-                        $supervisor = $planSupervisor;
-
-                    $supervisor->fullName = $row[15];
-                    $supervisor->nationalityCode = $row[16];
-                    $supervisor->save();
-                    $plan->supervisor_id = $supervisor->id;
+//                    $excelSupervisorInSystem = Supervisor::where('nationalityCode', $row[16])->first();
+//
+//                    if( !$planSupervisor and !$excelSupervisorInSystem )
+//                        $supervisor = new Supervisor();
+//
+//                    if( $planSupervisor and $excelSupervisorInSystem )
+//                        $supervisor = $excelSupervisorInSystem;
+//
+//                    if( !$planSupervisor and $excelSupervisorInSystem )
+//                        $supervisor = $excelSupervisorInSystem;
+//
+//                    if( $planSupervisor and !$excelSupervisorInSystem )
+//                        $supervisor = $planSupervisor;
+//
+//                    $supervisor->fullName = $row[15];
+//                    $supervisor->nationalityCode = $row[16];
+//                    $supervisor->save();
                 }
+                $plan->supervisor_id =1;
                 $plan->save();
             }
             catch (\Exception $exception){

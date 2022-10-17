@@ -57,10 +57,16 @@ if( !function_exists('shamsi2miladi') ){
 
 if( !function_exists('miladi2shamsi') ){
     function miladi2shamsi($format, $date){
-        if( gettype($date) == 'string' )
-            $date = \Illuminate\Support\Carbon::createFromTimeString($date);
+        try {
+            if( gettype($date) == 'string' )
+                $date = \Illuminate\Support\Carbon::createFromTimeString($date);
 
-        return Jalalian::fromCarbon($date)->format($format);
+            return Jalalian::fromCarbon($date)->format($format);
+        }catch (\Exception $e){
+            \Illuminate\Support\Facades\Log::alert($e->getMessage()); ;
+            return 0;
+        }
+
     }
 }
 

@@ -73,6 +73,10 @@ return [
                     'title' => 'دوره های پیشنهاد شده',
                     'url' => '/dashboard/suggests',
                     'permissions' => 'suggests'
+                ],[
+                    'title' => 'مشکلات',
+                    'url' => '/dashboard/problem',
+                    'permissions' => 'problems'
                 ],
             ]
         ],

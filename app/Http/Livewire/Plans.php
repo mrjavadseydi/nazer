@@ -78,9 +78,17 @@ class Plans extends LivewireDatatable
 
             Column::name('performers.firstName')->label("نام")->alignRight()->headerAlignCenter()->filterable(),
             Column::name('performers.lastName')->label("نام خانوادگی")->alignRight()->headerAlignCenter()->filterable(),
-            Column::callback('performers.phone', function ($phone){
-                return "<a href='tel:$phone'>$phone</a>";
-            })->label("تلفن همراه")->alignRight()->headerAlignCenter()->filterable(),
+            Column::name("performers.phone")->alignRight()->headerAlignCenter()->label('موبایل')->
+            filterable()->view('livewire.phone'),
+//            Column::callback(['plans.id', 'plans.area_city_id', 'areas.id'], function ($planID, $planAreaCityID, $areaCityID){
+//                return view('livewire.select-editable', [
+//                    'rowId' => $planID ? $planID : 0,
+//                    'modelName' => "AreaCity",
+//                    'nullable' => true,
+//                    'valueId' => $planAreaCityID ? $planAreaCityID : 0 , // myModel.user_id
+//                    'options' => AreaCity::All(), // [["id" => , "name" => , ....], ...]
+//                ]);
+//            })->label('محله')->alignRight()->headerAlignCenter(),
             Column::callback(['plans.id', 'plans.area_city_id', 'areas.id'], function ($planID, $planAreaCityID, $areaCityID){
                 return view('livewire.select-editable', [
                     'rowId' => $planID ? $planID : 0,

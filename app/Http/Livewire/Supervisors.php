@@ -74,6 +74,9 @@ class Supervisors extends LivewireDatatable
                     return "<a style='display: block' href='".route('observes.done', compact('supervisorID', 'persianFrom', 'persianTo'))."'>$count</a>";
                 return $count;
             })->label('نظارت های انجام شده ' . $monthArray[$month - 1])->alignRight()->headerAlignCenter(),
+            Column::callback(['id', 'phone','nationalityCode'], function ($supervisorID, $phone,$n) {
+                return Observe::where('supervisor_id',$supervisorID)->where('on_bpms',1)->count();
+            })->label("ثبت در bpms")->alignRight()->headerAlignCenter(),
             Column::callback(['id'], function ($id){
                 return view('livewire.supervisors-datatable', compact('id'));
             })->label('عملیات')->alignRight()->headerAlignCenter()

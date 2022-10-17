@@ -89,6 +89,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
 
     Route::get('report/13', Report13ControllerAlias::class)->name('report.13');
+    Route::resource('problem',\App\Http\Controllers\ProblemController::class)->except('show');
     Route::get('/remove_cache', function () {
         if (!auth()->user()->isAdmin)
             abort(403);
@@ -106,7 +107,7 @@ Route::post('/upload', function (Request $request) {
         $image->move(public_path('uploads'));
     }
 })->name('upload');
-
+/*
 Route::get('/test', function () {
     $files = scandir(public_path('uploads'));
     $prefix = public_path('uploads') . "/";
@@ -162,3 +163,4 @@ Route::get('setFile/{file}/{plan}/{type}', function ($file, $plan, $type) {
     ]);
     return "<script>window.close()</script>";
 })->name('setFile');
+*/
