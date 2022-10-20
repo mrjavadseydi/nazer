@@ -18,4 +18,7 @@ class City extends Model
     {
         return $this->belongsToMany(Area::class);
     }
+    public function bank(){
+        return $this->hasMany(Bank::class);
+    }
 }

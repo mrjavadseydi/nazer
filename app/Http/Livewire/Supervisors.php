@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Observe;
 use App\Models\Plan;
 use App\Models\Supervisor;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Mediconesystems\LivewireDatatables\Column;
@@ -63,8 +64,9 @@ class Supervisors extends LivewireDatatable
             })->label('تعداد طرح ها')->alignRight()->headerAlignCenter(),
             Column::callback(['id', 'phone'], function ($supervisorID, $phone){
                 $count = Observe::where('supervisor_id', $supervisorID)->get()->count() ?? 0;
+                $on_bpms = Observe::where('supervisor_id', $supervisorID)->where('on_bpms',1)->count();
                 if( $count )
-                    return "<a style='display: block' href='".route('observes.done', compact('supervisorID'))."'>$count</a>";
+                    return "<a style='display: block' href='".route('observes.done', compact('supervisorID'))."'>$count / $on_bpms </a>";
 
                 return $count;
             })->label('نظارت های انجام شده')->alignRight()->headerAlignCenter(),
@@ -75,7 +77,8 @@ class Supervisors extends LivewireDatatable
                 return $count;
             })->label('نظارت های انجام شده ' . $monthArray[$month - 1])->alignRight()->headerAlignCenter(),
             Column::callback(['id', 'phone','nationalityCode'], function ($supervisorID, $phone,$n) {
-                return Observe::where('supervisor_id',$supervisorID)->where('on_bpms',1)->count();
+                $id = User::where('nationalityCode',$n)->first()->id;
+                return Observe::where('bpms_update_user',$id)->where('on_bpms',1)->count();
             })->label("ثبت در bpms")->alignRight()->headerAlignCenter(),
             Column::callback(['id'], function ($id){
                 return view('livewire.supervisors-datatable', compact('id'));

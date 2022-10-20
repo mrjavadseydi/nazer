@@ -66,6 +66,8 @@ class Plans extends LivewireDatatable
         $more = Column::callback(['id', 'supervisor.fullName'], function ($id, $supervisorFullName){
             $supervisors = Supervisor::all();
             return view('livewire.more-actions', compact('id', 'supervisorFullName', 'supervisors'));
+        })->exportCallback(function (){
+            return "";
         });
         $extras = [1 => $more, 13 => 'supervisor.fullName:نام ناظر'];
 
@@ -97,7 +99,14 @@ class Plans extends LivewireDatatable
                     'valueId' => $planAreaCityID ? $planAreaCityID : 0 , // myModel.user_id
                     'options' => AreaCity::All(), // [["id" => , "name" => , ....], ...]
                 ]);
-            })->label('محله')->alignRight()->headerAlignCenter(),
+            })->label('محله')->alignRight()->headerAlignCenter()->exportCallback(function ($planID, $planAreaCityID, $areaCityID) {
+                foreach ( AreaCity::All() as $option){
+                    if ($option->id==( $planAreaCityID ? $planAreaCityID : 0 )){
+                        return $option->area->title;
+                    }
+                }
+
+            }),
             Column::name('plans.address')->label("آدرس طرح")->alignRight()->headerAlignCenter()->editable()->filterable(),
             Column::name('plans.location_type')->label("نوع موقعیت")->alignRight()->headerAlignCenter()->filterable(),
 
@@ -118,23 +127,30 @@ class Plans extends LivewireDatatable
 
 //            Column::name('plans.self_sufficiency_status')->label("وضعیت حودکفایی")->alignRight()->headerAlignCenter(),
 //            Column::callback('plans.implement_method', function ($method){
-//                return substr($method,0 ,4) . '';
+//                return substr($method,0 ,4) . '';latitude
 //            })->label("نحوه اجرا")->alignRight()->headerAlignCenter(),
             Column::callback('plans.last_observe_date', function ($lastObserveDate){
                 if( $lastObserveDate == '' )
                     return null;
                 return miladi2shamsi('Y/m/d', $lastObserveDate);
             })->label("آخرین بازدید")->alignRight()->headerAlignCenter(),
-            Column::callback(['id', 'plans.last_observe_date'], function ($planID, $plan){
-                $count = Observe::where('plan_id', $planID)->get()->count() ?? 0;
-                if( $count )
-                    return "<a style='display: block' href='".route('observes.done', compact('planID'))."'>$count</a>";
+            Column::name('id')->label('انجام شده')->alignRight()->headerAlignCenter()->view('components.done')->exportCallback(function ($value){
+                return \App\Models\Observe::where('plan_id', $value)->get()->count() ?? 0;
+            }),
 
-                return $count;
-            })->label('انجام شده')->alignRight()->headerAlignCenter(),
+//            Column::name(['id', 'plans.last_observe_date'], function ($planID, $plan){
+//                $count = Observe::where('plan_id', $planID)->get()->count() ?? 0;
+//                if( $count )
+//                    return "<a style='display: block' href='".route('observes.done', compact('planID'))."'>$count</a>";
+//
+//                return $count;
+//            })->label('انجام شده')->alignRight()->headerAlignCenter(),
+            Column::name('latitude')->alignCenter()->headerAlignCenter()->view('components.location')->label('gps'),
             Column::callback(['id'], function ($id){
                 return view('livewire.plans-datatable', compact('id'));
-            })->label('عملیات')->alignRight()->headerAlignCenter()
+            })->label('عملیات')->alignRight()->headerAlignCenter()->exportCallback(function (){
+                return "";
+            })
         ];
 
 
