@@ -145,7 +145,12 @@ class Plans extends LivewireDatatable
 //
 //                return $count;
 //            })->label('انجام شده')->alignRight()->headerAlignCenter(),
-            Column::name('latitude')->alignCenter()->headerAlignCenter()->view('components.location')->label('gps'),
+            Column::callback(['longitude','latitude'],function ($long,$lat){})->alignCenter()->headerAlignCenter()
+                ->view('components.location')->label('gps')->exportCallback(function ($long,$lat){
+                    if ($lat){
+                        return"دارد";
+                    }
+                }),
             Column::callback(['id'], function ($id){
                 return view('livewire.plans-datatable', compact('id'));
             })->label('عملیات')->alignRight()->headerAlignCenter()->exportCallback(function (){
