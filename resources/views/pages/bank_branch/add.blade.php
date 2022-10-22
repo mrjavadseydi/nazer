@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('dashboard_page_title', 'افزودن بانک جدید')
+@section('dashboard_page_title', 'افزودن شعبه جدید')
 
 @section('dashboard_content')
     <div class="container-fluid text-right">

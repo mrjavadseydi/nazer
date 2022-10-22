@@ -1,5 +1,6 @@
 @extends('layout.master')
-@section('dashboard_page_title', 'لیست  شعب')
+
+@section('dashboard_page_title', 'لیست  شعب'.$bank_name)
 
 @section('dashboard_content')
     <div class="container-fluid text-right p-0">

@@ -23,17 +23,22 @@ class BranchDataTable extends LivewireDatatable
 
     public function columns()
     {
-        return [
+        $list =  [
             NumberColumn::callback('id', function ($id){
                 return $this->counter++;
             })->label('ردیف')->alignRight()->headerAlignCenter(),
             Column::name('name')->label('نام شعبه')->alignRight()->filterable()->headerAlignCenter(),
             Column::name('code')->label('کد شعبه')->alignRight()->filterable()->headerAlignCenter(),
+            Column::name('bank.name')->label('نام بانک')->alignRight()->filterable()->headerAlignCenter(),
             Column::name('phone')->label('تلفن')->alignRight()->filterable()->headerAlignCenter(),
             Column::name('city.title')->label('شهر')->alignRight()->filterable()->headerAlignCenter(),
             Column::callback(['id'], function ($id){
                 return view('livewire.branch-data-table', compact('id'));
             })->label('عملیات')->alignRight()->headerAlignCenter()
         ];
+        if (request()->has('bank')){
+            unset($list[3]);
+        }
+        return $list;
     }
 }

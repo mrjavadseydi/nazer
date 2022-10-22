@@ -16,7 +16,15 @@ class BankBranchController extends Controller
      */
     public function index()
     {
-        return  view('pages.bank_branch.index');
+        $bank_name = "";
+        if (\request()->has('bank')){
+            $bank_name =' '. Bank::find(\request()->get('bank'))->name;
+            if (strpos($bank_name, 'بانک') === false) {
+                $bank_name = ' بانک'
+                . $bank_name;
+            }
+        }
+        return  view('pages.bank_branch.index',compact('bank_name'));
     }
 
     /**
