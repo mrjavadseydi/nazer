@@ -91,6 +91,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('report/13', Report13ControllerAlias::class)->name('report.13');
     Route::resource('problem',\App\Http\Controllers\ProblemController::class)->except('show');
     Route::resource('bank',\App\Http\Controllers\BankController::class)->except('show');
+    Route::resource('branches',\App\Http\Controllers\BankBranchController::class)->except('show');
     Route::get('/remove_cache', function () {
         if (!auth()->user()->isAdmin)
             abort(403);

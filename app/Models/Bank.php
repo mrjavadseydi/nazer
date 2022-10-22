@@ -15,8 +15,6 @@ class Bank extends Model
     public function branch(){
         return $this->hasMany(BankBranch::class);
     }
-    public function city(){
-        return $this->belongsTo(City::class);
-    }
+
 
 }

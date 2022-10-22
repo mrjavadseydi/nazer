@@ -1,4 +1,7 @@
 <div>
+    <a href="{{ route('branches.index', ['bank'=>$id]) }}" class="btn btn-sm btn-primary font-size-h5">
+        شعب
+    </a>
     <a href="{{ route('bank.edit', $id) }}" class="btn btn-sm btn-success font-size-h5">
         ویرایش
     </a>

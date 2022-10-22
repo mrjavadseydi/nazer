@@ -17,25 +17,8 @@
                                 <input type="text" class="form-control" name="name" @isset($bank) value="{{ $bank->name }}" @endisset>
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-12">
-                            <div class="form-group px-3">
-                                <label for="" class="form-label">شهر</label>
-                                <select class="form-control" name="city_id">
-                                    @foreach(\App\Models\City::all() as $city)
-                                        <option value="{{ $city->id }}">{{ $city->title }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    @if(isset($bank)&&$branches = $bank->branch)
-                        @foreach($branches as $branch)
-                            <livewire:branch-input :i="1" :form="$branch" />
-                        @endforeach
-                    @else
 
-                        <livewire:branch-input/>
-                    @endif
+                    </div>
                 </div>
                 <div class="card-footer">
                     <button class="btn btn-primary">@isset($bank) ویرایش بانک @else ثبت بانک @endif</button>

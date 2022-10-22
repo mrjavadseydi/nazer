@@ -26,7 +26,6 @@ class BankDataTable extends LivewireDatatable
                 return $this->counter++;
             })->label('ردیف')->alignRight()->headerAlignCenter(),
             Column::name('name')->label('نام بانک')->alignRight()->filterable()->headerAlignCenter(),
-            Column::name('city.title')->label('شهر')->alignRight()->filterable()->headerAlignCenter(),
             Column::callback(['id','created_at'],function ($id){
                 return BankBranch::where('bank_id',$id)->count();
             })->label('تعداد شعب')->headerAlignCenter()->alignCenter(),

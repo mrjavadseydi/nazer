@@ -36,18 +36,9 @@ class BankController extends Controller
      */
     public function store(Request $request)
     {
-        $bank = Bank::create([
+        Bank::create([
             'name'=>$request->name,
-            'city_id'=>$request->city_id
         ]);
-        foreach ($request->branchName as $i=> $name){
-            BankBranch::create([
-                'bank_id'=>$bank->id,
-                'name'=>$name,
-                'address'=>$request->branchAddress[$i],
-                'code'=>$request->branchCode[$i]
-            ]);
-        }
         return redirect()->route('bank.index');
 
     }
@@ -85,19 +76,10 @@ class BankController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $bank = Bank::find($id)->update([
+         Bank::find($id)->update([
             'name'=>$request->name,
-            'city_id'=>$request->city_id
         ]);
-        BankBranch::where('bank_id',$id)->delete();
-        foreach ($request->branchName as $i=> $name){
-            BankBranch::create([
-                'bank_id'=>$id,
-                'name'=>$name,
-                'address'=>$request->branchAddress[$i],
-                'code'=>$request->branchCode[$i]
-            ]);
-        }
+
         return redirect()->route('bank.index');
     }
 

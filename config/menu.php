@@ -81,6 +81,10 @@ return [
                     'title' => 'بانک ها',
                     'url' => '/dashboard/bank',
                     'permissions' => 'banks'
+                ], [
+                    'title' => 'شعب',
+                    'url' => '/dashboard/branches',
+                    'permissions' => 'branches'
                 ],
             ]
         ],
