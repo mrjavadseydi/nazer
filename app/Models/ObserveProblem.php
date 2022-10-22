@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class ObserveProblem extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 }

@@ -251,8 +251,19 @@
                                        value="{{last_observe_value($plan->id,"net_worth")}}">
                             </div>
                         </div>
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="form-group">
+                                <label for="" class="form-label"><strong>مشکلات طرح</strong></label>
+                                <select name="problems[]" class="custom-select form-control select2-generate"
+                                        id="problems" multiple="multiple">
+                                    @foreach( \App\Models\Problem::where('plan_type',$plan->category)->get() as $problem )
+                                        <option value="{{ $problem->id }}" {{has_problem($plan->id,$problem->id)?"selected":""}}>{{ $problem->problem }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <livewire:bank-branche-select :plan_id="$plan->id" />
-                        <div class="col-sm-12 col-lg-6"></div>
+
                         <div class="col-lg-4 col-sm-6">
                             <div class="form-group">
                                 <label for="" class="form-label"><strong>نیاز به آموزش</strong></label>
@@ -1108,6 +1119,7 @@
                     dataType: 'json'
                 },
             });
+            let problemsSelect2 = $('#problems').select2({});
 
             let suggestsSelect2 = $('#suggests').select2({
                 tags: true

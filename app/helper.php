@@ -118,3 +118,11 @@ if (!function_exists('last_observe_value')){
         return \App\Models\Observe::where('plan_id',$plan_id)->orderBy('id','desc')->first()[$type]??0;
     }
 }
+if (!function_exists('has_problem')){
+    function has_problem($plan_id,$problem_id){
+        $last_observer = \App\Models\Observe::where('plan_id',$plan_id)->orderBy('id','desc')->first();
+        if (!$last_observer)
+            return false;
+        return (bool) \App\Models\ObserveProblem::where('observe_id',$last_observer->id)->where('problem_id',$problem_id)->first() ;
+    }
+}

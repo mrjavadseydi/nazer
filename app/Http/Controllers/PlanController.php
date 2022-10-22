@@ -7,6 +7,7 @@ use App\Models\Document;
 use App\Models\Employer;
 use App\Models\Image;
 use App\Models\Observe;
+use App\Models\ObserveProblem;
 use App\Models\Organization;
 use App\Models\Performer;
 use App\Models\Plan;
@@ -226,7 +227,14 @@ class PlanController extends Controller
         $observe->net_worth  = $request->net_worth;
 
         $observe->save();
-
+        foreach($request->problems as $problem){
+            if(!ObserveProblem::where('observe_id',$observe->id)->where('problem_id',$problem)->first()){
+                ObserveProblem::create([
+                    'observe_id'=>$observe->id,
+                    'problem_id'=>$problem
+                ]);
+            }
+        }
         foreach ($request->observe_files as $item) {
             $documentID = $item['document'];
             $document = $plan->documents()->find($documentID);

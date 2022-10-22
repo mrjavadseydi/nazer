@@ -19,10 +19,13 @@ class BankBrancheSelect extends Component
         if ($plan->branch_id){
             $this->last_branch_id = $plan->branch_id;
             $this->last_bank_id = BankBranch::find($plan->branch_id)->bank_id;
+            $this->bank_id =     $this->last_bank_id;
+            $this->branches = BankBranch::where('bank_id',$this->last_bank_id )->get();
         }
     }
     public function updateBranches(){
-        $this->branches = BankBranch::where('bank_id',$this->bank_id)->get();
+
+        $this->branches = BankBranch::where('bank_id',$this->bank_id )->get();
     }
     public function render()
     {
