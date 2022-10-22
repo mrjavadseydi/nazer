@@ -205,6 +205,9 @@ class PlanController extends Controller
         if( $request->has_employment == 'yes' ){
             $plan->has_employment = true;
         }
+        if( $request->filled('branch_id') ){
+            $plan->branch_id = $request->branch_id;
+        }
         $plan->save();
 
         $observe = Observe::where('plan_id', $plan->id)->whereDate('observe_date', $stringDate)->first();

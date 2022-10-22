@@ -251,6 +251,7 @@
                                        value="{{last_observe_value($plan->id,"net_worth")}}">
                             </div>
                         </div>
+                        <livewire:bank-branche-select :plan_id="$plan->id" />
                         <div class="col-sm-12 col-lg-6"></div>
                         <div class="col-lg-4 col-sm-6">
                             <div class="form-group">

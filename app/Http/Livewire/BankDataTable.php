@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Bank;
+use App\Models\BankBranch;
 use App\Models\Suggest;
 use Livewire\Component;
 use Mediconesystems\LivewireDatatables\Column;
@@ -25,6 +26,13 @@ class BankDataTable extends LivewireDatatable
                 return $this->counter++;
             })->label('ردیف')->alignRight()->headerAlignCenter(),
             Column::name('name')->label('نام بانک')->alignRight()->filterable()->headerAlignCenter(),
+            Column::name('city.title')->label('شهر')->alignRight()->filterable()->headerAlignCenter(),
+            Column::callback(['id','created_at'],function ($id){
+                return BankBranch::where('bank_id',$id)->count();
+            })->label('تعداد شعب')->headerAlignCenter()->alignCenter(),
+            Column::callback(['id'], function ($id){
+                return view('livewire.bank-data-table', compact('id'));
+            })->label('عملیات')->alignRight()->headerAlignCenter()
         ];
     }
 }

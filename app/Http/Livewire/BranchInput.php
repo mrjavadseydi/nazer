@@ -13,6 +13,11 @@ class BranchInput extends Component
         $this->i=$i;
         $this->form = $form;
     }
+
+    public function add()
+    {
+        $this->i++;
+    }
     public function render()
     {
         return view('livewire.branch-input');
