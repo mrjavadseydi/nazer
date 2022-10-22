@@ -11,7 +11,7 @@
 {{--                        <option value="null">انتخاب کنید</option>--}}
 {{--                    @endif--}}
                     @foreach($banks as $bank)
-                        <option value="{{ $bank->id }}" {{$bank->id == $last_bank_id  ? "selected":""}}  >{{ $bank->name . "-" . $bank->city->title}}</option>
+                        <option value="{{ $bank->id }}" {{$bank->id == $last_bank_id  ? "selected":""}}  >{{ $bank->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -23,7 +23,7 @@
                 <select required class="form-control" name="branch_id">
 
                     @foreach($branches as $branch)
-                        <option value="{{ $branch->id }}"  {{$last_branch_id == $branch->id ? "selected":""}} >{{ $branch->name ." - " . $branch->code}}</option>
+                        <option value="{{ $branch->id }}"  {{$last_branch_id == $branch->id ? "selected":""}} >{{ $branch->name ." - " . $branch->code }}@if( $branch->city->title){{" - ". $branch->city->title}}@endif</option>
                     @endforeach
                 </select>
             </div>

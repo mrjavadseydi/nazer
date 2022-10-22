@@ -262,7 +262,7 @@
                                 </select>
                             </div>
                         </div>
-{{--                        <livewire:bank-branche-select :plan_id="$plan->id" />--}}
+                        <livewire:bank-branche-select :plan_id="$plan->id" />
 
                         <div class="col-lg-4 col-sm-6">
                             <div class="form-group">
