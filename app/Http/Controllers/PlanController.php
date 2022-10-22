@@ -234,7 +234,9 @@ class PlanController extends Controller
                     'problem_id'=>$problem
                 ]);
             }
+
         }
+        ObserveProblem::where('observe_id',$observe->id)->whereNotIn('problem_id',$request->problems)->delete();
         foreach ($request->observe_files as $item) {
             $documentID = $item['document'];
             $document = $plan->documents()->find($documentID);
