@@ -251,18 +251,18 @@
                                        value="{{last_observe_value($plan->id,"net_worth")}}">
                             </div>
                         </div>
-                        <div class="col-lg-6 col-sm-12">
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>مشکلات طرح</strong></label>
-                                <select name="problems[]" class="custom-select form-control select2-generate"
-                                        id="problems" multiple="multiple">
-                                    @foreach( \App\Models\Problem::where('plan_type',$plan->category)->get() as $problem )
-                                        <option value="{{ $problem->id }}" {{has_problem($plan->id,$problem->id)?"selected":""}}>{{ $problem->problem }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-{{--                        <livewire:bank-branche-select :plan_id="$plan->id" />--}}
+{{--                        <div class="col-lg-6 col-sm-12">--}}
+{{--                            <div class="form-group">--}}
+{{--                                <label for="" class="form-label"><strong>مشکلات طرح</strong></label>--}}
+{{--                                <select name="problems[]" class="custom-select form-control select2-generate"--}}
+{{--                                        id="problems" multiple="multiple">--}}
+{{--                                    @foreach( \App\Models\Problem::where('plan_type',$plan->category)->get() as $problem )--}}
+{{--                                        <option value="{{ $problem->id }}" {{has_problem($plan->id,$problem->id)?"selected":""}}>{{ $problem->problem }}</option>--}}
+{{--                                    @endforeach--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+                        {{--                        <livewire:bank-branche-select :plan_id="$plan->id" />--}}
 
                         <div class="col-lg-4 col-sm-6">
                             <div class="form-group">
@@ -737,7 +737,29 @@
                             </div>
                         </div>
                     </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-12">
 
+                            <div class="form-group text-right">
+                                <p for="" class="form-label text-right pt-3"><strong>مشکلات طرح</strong></p>
+                                <div class="radio-inline">
+                                    @foreach( \App\Models\Problem::where('plan_type',$plan->category)->get() as $problem )
+                                        <input type="checkbox" class="p-2" name="problems[]"
+                                               {{has_problem($plan->id,$problem->id)?"checked":""}}  value="{{ $problem->id }}"
+                                               id="{{ $problem->id }}problem">
+                                        <label class="mb-0 p-2 mt-1"
+                                               for="{{ $problem->id }}problem">{{$problem->problem}}
+
+                                        </label>
+
+                                    @endforeach
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="row">
@@ -757,8 +779,10 @@
                                                     </div>
 
                                                     <div class="col-lg-4 col-sm-5 col-xs-5">
-                                                        <label for="" class="form-label"><strong>بارگزاری فایل</strong></label>
-                                                        <input type="file" name="file" accept="image/*;capture=camera">
+                                                        <label for="" class="form-label"><strong>بارگزاری
+                                                                فایل</strong></label>
+                                                        <input type="file" name="file"
+                                                               accept="image/*;capture=camera">
                                                     </div>
 
                                                     <div class="col-lg-2 col-sm-2 col-xs-2">
