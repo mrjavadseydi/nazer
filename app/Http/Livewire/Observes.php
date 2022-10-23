@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Employer;
 use App\Models\Image;
 use App\Models\Observe;
 use App\Models\Plan;
@@ -101,6 +102,10 @@ class Observes extends LivewireDatatable
             Column::callback(['observes.plan_id','id'], function ($date,$phone){
                 return Image::where([['plan_id', $date], ['document_id', '5']])->count()==1 ? " &#x2714;":"&#215;";
             })->label('عکس محیط')->alignRight()->headerAlignCenter(),
+
+            Column::callback(['observes.plan_id','id','created_at'], function ($date,$phone){
+                return Employer::query()->where('plan_id',$date)->count()??0;
+            })->label('تعداد کارکنان')->alignRight()->headerAlignCenter(),
 
 
             Column::callback(['id'], function ($observeID){
