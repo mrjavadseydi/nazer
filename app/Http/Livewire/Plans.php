@@ -25,6 +25,7 @@ class Plans extends LivewireDatatable
     public $perPage = 50;
     public $supervisorid;
     public $hideable = 'select';
+    public $active;
     public function builder()
     {
         $user = Auth::user();
@@ -38,13 +39,8 @@ class Plans extends LivewireDatatable
                 $plans = Plan::query();
             }
         }
-        if (request()->has('hold')){
-            $plans = $plans->active(true);
-        }
-        else{
-            $plans = $plans->where('on_hold',false);
-        }
-        return $plans
+
+        $plans =  $plans
             ->leftJoin('performers', function ($join){
                 $join->on('plans.performer_id', '=', 'performers.id');
             })
@@ -64,6 +60,9 @@ class Plans extends LivewireDatatable
                 $join->on('plans.area_city_id', '=', 'area_city.id');
 //                dd(DB::raw($join->get));
             });
+        $plans = $plans->where('on_hold',$this->active);
+
+        return $plans;
     }
 
     public function columns()
@@ -97,27 +96,27 @@ class Plans extends LivewireDatatable
 //                    'options' => AreaCity::All(), // [["id" => , "name" => , ....], ...]
 //                ]);
 //            })->label('محله')->alignRight()->headerAlignCenter(),
-            Column::callback(['plans.id', 'plans.area_city_id', 'areas.id'], function ($planID, $planAreaCityID, $areaCityID){
-                return view('livewire.select-editable', [
-                    'rowId' => $planID ? $planID : 0,
-                    'modelName' => "AreaCity",
-                    'nullable' => true,
-                    'valueId' => $planAreaCityID ? $planAreaCityID : 0 , // myModel.user_id
-                    'options' => AreaCity::All(), // [["id" => , "name" => , ....], ...]
-                ]);
-            })->label('محله')->alignRight()->headerAlignCenter()->exportCallback(function ($planID, $planAreaCityID, $areaCityID) {
-                foreach ( AreaCity::All() as $option){
-                    if ($option->id==( $planAreaCityID ? $planAreaCityID : 0 )){
-                        return $option->area->title;
-                    }
-                }
-
-            }),
+//            Column::callback(['plans.id', 'plans.area_city_id', 'areas.id'], function ($planID, $planAreaCityID, $areaCityID){
+//                return view('livewire.select-editable', [
+//                    'rowId' => $planID ? $planID : 0,
+//                    'modelName' => "AreaCity",
+//                    'nullable' => true,
+//                    'valueId' => $planAreaCityID ? $planAreaCityID : 0 , // myModel.user_id
+//                    'options' => AreaCity::All(), // [["id" => , "name" => , ....], ...]
+//                ]);
+//            })->label('محله')->alignRight()->headerAlignCenter()->exportCallback(function ($planID, $planAreaCityID, $areaCityID) {
+//                foreach ( AreaCity::All() as $option){
+//                    if ($option->id==( $planAreaCityID ? $planAreaCityID : 0 )){
+//                        return $option->area->title;
+//                    }
+//                }
+//
+//            }),
             Column::name('plans.address')->label("آدرس طرح")->alignRight()->headerAlignCenter()->editable()->filterable(),
             Column::name('plans.location_type')->label("نوع موقعیت")->alignRight()->headerAlignCenter()->filterable(),
 
-//            Column::name('plans.category')->label("گروه فعالیت")->alignRight()->headerAlignCenter(),
-//            Column::name('plans.level')->label("سطح فعالیت")->alignRight()->headerAlignCenter(),
+            Column::name('plans.category')->label("گروه فعالیت")->alignRight()->headerAlignCenter(),
+            Column::name('plans.level')->label("سطح فعالیت")->alignRight()->headerAlignCenter(),
 //            Column::name('plans.status')->label("وضعیت فعالیت")->alignRight()->headerAlignCenter(),
             Column::name('plans.title')->label("عنوان طرح")->alignRight()->headerAlignCenter()->filterable(),
             Column::callback('plans.start_date', function ($startDate){
@@ -164,7 +163,10 @@ class Plans extends LivewireDatatable
             })
         ];
 
-
+        if ($this->active){
+            $a = [ Column::name('plans.hold_reason')->label("علت")->alignRight()->headerAlignCenter()->filterable()];
+            array_splice( $columns, 2, 0, $a );
+        }
 
         if( Str::lower(Auth::user()->role->name) == 'supervisor' ){
             return $columns;
@@ -177,8 +179,7 @@ class Plans extends LivewireDatatable
                 }
                 array_splice($columns, $index, 0, [$extra]);
             }
-            if (request()->has('hold'))
-                $columns[2] = Column::name('plans.hold_reason')->label("علت")->alignRight()->headerAlignCenter()->filterable();
+
             return $columns;
         }
     }

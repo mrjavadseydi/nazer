@@ -25,7 +25,8 @@ class PlanController extends Controller
     public function index(Request $request)
     {
         $data = $request->input();
-        return view('pages.plans.index', compact('data'));
+        $hold = $request->has('hold')?1:0;
+        return view('pages.plans.index', compact('data','hold'));
     }
 
     /**

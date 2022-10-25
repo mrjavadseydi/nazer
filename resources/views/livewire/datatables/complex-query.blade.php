@@ -46,7 +46,7 @@
                         </div>
                     @endisset
                     <button x-show="rules" wire:click="resetQuery" class="flex items-center space-x-2 px-3 border border-red-400 rounded-md bg-white text-red-500 text-xs leading-4 font-medium uppercase tracking-wider hover:bg-red-200 focus:outline-none">
-                        <span>{{ __('Reset') }}</span>
+                        <span>{{ __('ریست') }}</span>
                         <x-icons.x-circle class="m-2" />
                     </button>
                 </div>
