@@ -40,6 +40,7 @@ class UpldateLocationType extends Command
     {
 
         Plan::where('address','like',"%روستا%")->update(['location_type'=>'روستایی']);
+        Plan::where('address','not like',"%روستا%")->update(['location_type'=>'شهری']);
         return 0;
     }
 }

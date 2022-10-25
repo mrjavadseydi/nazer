@@ -92,6 +92,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::resource('problem',\App\Http\Controllers\ProblemController::class)->except('show');
     Route::resource('bank',\App\Http\Controllers\BankController::class)->except('show');
     Route::resource('branches',\App\Http\Controllers\BankBranchController::class)->except('show');
+    Route::post('plans/report/problem/{id}',[\App\Http\Controllers\PlanController::class,'holdPlan'])->name('report.problem');
     Route::get('/remove_cache', function () {
         if (!auth()->user()->isAdmin)
             abort(403);

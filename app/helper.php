@@ -57,6 +57,9 @@ if( !function_exists('shamsi2miladi') ){
 
 if( !function_exists('miladi2shamsi') ){
     function miladi2shamsi($format, $date){
+        if (is_int($date)){
+            $date = $date."/01/01";
+        }
         try {
             if( gettype($date) == 'string' )
                 $date = \Illuminate\Support\Carbon::createFromTimeString($date);

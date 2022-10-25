@@ -24,7 +24,7 @@ class Plans extends LivewireDatatable
     public $observesCount = 0;
     public $perPage = 50;
     public $supervisorid;
-
+    public $hideable = 'select';
     public function builder()
     {
         $user = Auth::user();
@@ -38,7 +38,12 @@ class Plans extends LivewireDatatable
                 $plans = Plan::query();
             }
         }
-
+        if (request()->has('hold')){
+            $plans = $plans->active(true);
+        }
+        else{
+            $plans = $plans->where('on_hold',false);
+        }
         return $plans
             ->leftJoin('performers', function ($join){
                 $join->on('plans.performer_id', '=', 'performers.id');
@@ -63,18 +68,19 @@ class Plans extends LivewireDatatable
 
     public function columns()
     {
-        $more = Column::callback(['id', 'supervisor.fullName'], function ($id, $supervisorFullName){
-            $supervisors = Supervisor::all();
-            return view('livewire.more-actions', compact('id', 'supervisorFullName', 'supervisors'));
-        })->exportCallback(function (){
-            return "";
-        });
-        $extras = [1 => $more, 13 => 'supervisor.fullName:نام ناظر'];
+//        $more =
+        $extras = [ 13 => 'supervisor.fullName:نام ناظر'];
 
         $columns = [
             NumberColumn::callback('id', function ($id){
                 return $this->counter++;
             })->label('#')->alignRight()->headerAlignCenter(),
+            Column::callback(['id', 'supervisor.fullName'], function ($id, $supervisorFullName){
+                $supervisors = Supervisor::all();
+                return view('livewire.more-actions', compact('id', 'supervisorFullName', 'supervisors'));
+            })->exportCallback(function (){
+                return "";
+            }),
             Column::name('organizations.title')->label("اداره")->alignRight()->headerAlignCenter(),
             Column::name('performers.nationalityCode')->label("کد ملی")->alignRight()->headerAlignCenter()->filterable(),
 
@@ -171,7 +177,8 @@ class Plans extends LivewireDatatable
                 }
                 array_splice($columns, $index, 0, [$extra]);
             }
-
+            if (request()->has('hold'))
+                $columns[2] = Column::name('plans.hold_reason')->label("علت")->alignRight()->headerAlignCenter()->filterable();
             return $columns;
         }
     }

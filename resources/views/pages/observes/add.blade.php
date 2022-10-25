@@ -147,680 +147,760 @@
                             <label for="" class="form-label">وضعیت طرح: <strong>{{ $plan->status }}</strong></label>
                         </div>
                     </div>
+
+                </div>
+                <div class="col-12 text-right">
+                    @if($plan->on_hold )
+                        این برنامه دارای نقص / مشکل جهت بازرسری میبابد .
+                        <br>
+                        توضیحات :
+                        {{ $plan->hold_reason }}
+                        @if(auth()->user()->isAdmin )
+                            <form action="{{route('report.problem',$plan->id)}}" method="post">
+                                @csrf
+                                <input type="hidden" class="form-control  mb-8" name="hold_reason" value=" ">
+                                <input type="hidden" class="form-control  mb-8" name="on-hold" value="0">
+                                <div class="col-md-2 col-sm-12">
+                                    <button type="submit" class="btn btn-primary">
+                                        مشکل رفع شد
+                                    </button>
+
+                                </div>
+                            </form>
+                        @endif
+                    @endif
+
+
                 </div>
             </div>
             <!--end::Body-->
         </div>
-
-        <form action="{{ route('observes.store', $plan->id) }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="card card-custom gutter-b">
-                <div class="card-header">
-                    <h3 class="card-title"><strong>ثبت بازدید</strong></h3>
-                </div>
-                <div class="card-body">
-                    <div class="row text-right border-bottom border-bottom-light-light mb-8">
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>تاریخ بازدید</strong></label>
-                                <input type="text" class="form-control persianDate mb-8" name="observe_date">
+        @if(!$plan->on_hold)
+            <form id="nezarat" action="{{ route('observes.store', $plan->id) }}" method="POST"
+                  enctype="multipart/form-data">
+                @csrf
+                <div class="card card-custom gutter-b">
+                    <div class="card-header">
+                        <h3 class="card-title"><strong>ثبت بازدید</strong></h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-right border-bottom border-bottom-light-light mb-8">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>تاریخ بازدید</strong></label>
+                                    <input type="text" class="form-control persianDate mb-8" name="observe_date">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>موقعیت مکانی</strong></label>
-                                <div class="row align-items-start">
-                                    <div class="form-group col-lg-4">
-                                        <input type="text" class="form-control" id="latitude" name="latitude"
-                                               value="{{ $plan->latitude }}">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>موقعیت مکانی</strong></label>
+                                    <div class="row align-items-start">
+                                        <div class="form-group col-lg-4">
+                                            <input type="text" class="form-control" id="latitude" name="latitude"
+                                                   value="{{ $plan->latitude }}">
+                                        </div>
+                                        <div class="form-group col-lg-4">
+                                            <input type="text" class="form-control" id="longitude" name="longitude"
+                                                   value="{{ $plan->longitude }}">
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <button class="btn btn-primary" type="button" onclick="getLocation()">دریافت
+                                                لوکیشن
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="form-group col-lg-4">
-                                        <input type="text" class="form-control" id="longitude" name="longitude"
-                                               value="{{ $plan->longitude }}">
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <button class="btn btn-primary" type="button" onclick="getLocation()">دریافت
-                                            لوکیشن
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>فاصله اداره تا موقعیت طرح (برحسب
+                                            کیلومتر)</strong></label>
+                                    <div class="d-flex">
+                                        <input type="number" inputmode="numeric" class="form-control" id="distance"
+                                               name="distance"
+                                               value="{{ $plan->distance }}">
+                                        <button class="btn btn-primary mr-4" type="button" id="calcDistance"
+                                                onclick="calculateDistance(this)" data-p1-lat="{{ $plan->latitude }}"
+                                                data-p1-lng="{{ $plan->longitude }}"
+                                                data-p2-lat="{{ $plan->organization->latitude }}"
+                                                data-p2-lng="{{ $plan->organization->longitude }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                 fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd"
+                                                      d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                                                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                                            </svg>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="col-sm-12 col-lg-6">
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>هزینه ماهانه
+                                        </strong>
+                                        (
+                                        <span id="monthly_charge"></span>
+                                        ریال)
 
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>فاصله اداره تا موقعیت طرح (برحسب
-                                        کیلومتر)</strong></label>
-                                <div class="d-flex">
-                                    <input type="number" inputmode="numeric" class="form-control" id="distance"
-                                           name="distance"
-                                           value="{{ $plan->distance }}">
-                                    <button class="btn btn-primary mr-4" type="button" id="calcDistance"
-                                            onclick="calculateDistance(this)" data-p1-lat="{{ $plan->latitude }}"
-                                            data-p1-lng="{{ $plan->longitude }}"
-                                            data-p2-lat="{{ $plan->organization->latitude }}"
-                                            data-p2-lng="{{ $plan->organization->longitude }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                             fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd"
-                                                  d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-                                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
-                                        </svg>
-                                    </button>
+                                    </label>
+                                    <input type="number" required step="10000000" class="form-control  mb-8"
+                                           inputmode="numeric" min="0" name="monthly_charge"
+                                           value="{{last_observe_value($plan->id,"monthly_charge")}}">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-lg-6">
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>درامد خالص ماهانه
+                                        </strong>
+                                        (
+                                        <span id="monthly_income"></span>
+                                        ریال)
+                                    </label>
+                                    <input type="number" required step="10000000" class="form-control  mb-8"
+                                           inputmode="numeric" min="0" name="monthly_income"
+                                           value="{{last_observe_value($plan->id,"monthly_income")}}">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-lg-6">
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>ارزش سرمایه فعلی
+                                        </strong>
+                                        (
+                                        <span id="net_worth"></span>
+                                        ریال)
+                                    </label>
+                                    <input type="number" required step="10000000" class="form-control  mb-8"
+                                           inputmode="numeric" min="0" name="net_worth"
+                                           value="{{last_observe_value($plan->id,"net_worth")}}">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="start_date" class="form-label"><strong>تاریخ
+                                            تسهیلات</strong></label>
+                                    <input type="text" class="form-control persianDate"
+                                           name="loan_time"
+
+                                           @if($plan->loan_time ) value="{{$plan->loan_time}}" @endif
+                                           id="start_date">
+                                </div>
+                            </div>
+                            {{--                        <div class="col-lg-6 col-sm-12">--}}
+                            {{--                            <div class="form-group">--}}
+                            {{--                                <label for="" class="form-label"><strong>مشکلات طرح</strong></label>--}}
+                            {{--                                <select name="problems[]" class="custom-select form-control select2-generate"--}}
+                            {{--                                        id="problems" multiple="multiple">--}}
+                            {{--                                    @foreach( \App\Models\Problem::where('plan_type',$plan->category)->get() as $problem )--}}
+                            {{--                                        <option value="{{ $problem->id }}" {{has_problem($plan->id,$problem->id)?"selected":""}}>{{ $problem->problem }}</option>--}}
+                            {{--                                    @endforeach--}}
+                            {{--                                </select>--}}
+                            {{--                            </div>--}}
+                            {{--                        </div>--}}
+                            {{--                            @if(auth()->user()->isAdmin)--}}
+                            {{--                                @dd($plan->category)--}}
+                            {{--                                @endif--}}
+                            <livewire:bank-branche-select :plan_id="$plan->id"/>
+
+                            <div class="col-sm-12 col-lg-6">
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>مبلغ وام
+                                        </strong>
+                                        (
+                                        <span id="loan_amount"></span>
+                                        ریال)
+                                    </label>
+                                    <input type="number" required step="10000000" class="form-control  mb-8"
+                                           inputmode="numeric" min="0" name="loan_amount"
+                                           value="{{$plan->loan_amount??0}}">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-lg-6">
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>مبلغ قسط
+                                        </strong>
+                                        (
+                                        <span id="installment"></span>
+                                        ریال)
+                                    </label>
+                                    <input type="number" required step="500000" class="form-control  mb-8"
+                                           inputmode="numeric" min="0" name="installment"
+                                           value="{{$plan->installment??0}}">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>نیاز به آموزش</strong></label>
+                                    <div class="radio-inline">
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="need_course" value="yes"
+                                                   @if( $plan->performer->need_course ) checked
+                                                   @endif data-need-courses/>
+                                            <span class="mr-0 ml-2"></span>
+                                            دارد
+                                        </label>
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="need_course" value="no"
+                                                   @if( !$plan->performer->need_course ) checked
+                                                   @endif data-need-courses/>
+                                            <span class="mr-0 ml-2"></span>
+                                            ندارد
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-sm-6" @if( !$plan->performer->need_course ) style="display: none"
+                                 @endif data-courses>
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>مشخص کردن دوره ها</strong></label>
+                                    <select name="courses[]" class="custom-select form-control select2-generate"
+                                            id="courses" multiple="multiple">
+                                        @foreach( $performerCourses as $course )
+                                            <option value="{{ $course->id }}" selected>{{ $course->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-sm-6" style="display: none" data-suggest-course>
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>پیشنهاد دوره</strong></label>
+                                    <select name="suggests[]" class="custom-select form-control select2-generate"
+                                            id="suggests" multiple="multiple">
+
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-lg-6">
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>هزینه اجرایی ماهانه
-                                    </strong>
-                                    (
-                                    <span id="monthly_charge"></span>
-                                    ریال)
-
-                                </label>
-                                <input type="number" required step="10000000" class="form-control  mb-8"
-                                       inputmode="numeric" min="0" name="monthly_charge"
-                                       value="{{last_observe_value($plan->id,"monthly_charge")}}">
+                        <div class="row text-right border-bottom border-bottom-light-light mb-8">
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>طرح سوژه و ویژه می باشد؟</strong></label>
+                                    <div class="radio-inline">
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="is_special" value="yes"
+                                                   @if( $plan->is_special ) checked @endif data-is-special/>
+                                            <span class="mr-0 ml-2"></span>
+                                            بله
+                                        </label>
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="is_special" value="no"
+                                                   @if( !$plan->is_special ) checked @endif data-is-special/>
+                                            <span class="mr-0 ml-2"></span>
+                                            خیر
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12 col-lg-6">
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>درامد خالص ماهانه
-                                    </strong>
-                                    (
-                                    <span id="monthly_income"></span>
-                                    ریال)
-                                </label>
-                                <input type="number" required step="10000000" class="form-control  mb-8"
-                                       inputmode="numeric" min="0" name="monthly_income"
-                                       value="{{last_observe_value($plan->id,"monthly_income")}}">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-lg-6">
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>ارزش سرمایه فعلی
-                                    </strong>
-                                    (
-                                    <span id="net_worth"></span>
-                                    ریال)
-                                </label>
-                                <input type="number" required step="10000000" class="form-control  mb-8"
-                                       inputmode="numeric" min="0" name="net_worth"
-                                       value="{{last_observe_value($plan->id,"net_worth")}}">
-                            </div>
-                        </div>
-{{--                        <div class="col-lg-6 col-sm-12">--}}
-{{--                            <div class="form-group">--}}
-{{--                                <label for="" class="form-label"><strong>مشکلات طرح</strong></label>--}}
-{{--                                <select name="problems[]" class="custom-select form-control select2-generate"--}}
-{{--                                        id="problems" multiple="multiple">--}}
-{{--                                    @foreach( \App\Models\Problem::where('plan_type',$plan->category)->get() as $problem )--}}
-{{--                                        <option value="{{ $problem->id }}" {{has_problem($plan->id,$problem->id)?"selected":""}}>{{ $problem->problem }}</option>--}}
-{{--                                    @endforeach--}}
-{{--                                </select>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-                        {{--                        <livewire:bank-branche-select :plan_id="$plan->id" />--}}
-
-                        <div class="col-lg-4 col-sm-6">
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>نیاز به آموزش</strong></label>
-                                <div class="radio-inline">
-                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                        <input type="radio" name="need_course" value="yes"
-                                               @if( $plan->performer->need_course ) checked @endif data-need-courses/>
-                                        <span class="mr-0 ml-2"></span>
-                                        دارد
-                                    </label>
-                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                        <input type="radio" name="need_course" value="no"
-                                               @if( !$plan->performer->need_course ) checked @endif data-need-courses/>
-                                        <span class="mr-0 ml-2"></span>
-                                        ندارد
-                                    </label>
+                            <div class="col-lg-8 col-sm-6" @if( !$plan->is_special ) style="display: none"
+                                 @endif data-special-resaon>
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>دلیل و کار شاخص طرح</strong></label>
+                                    <textarea name="special_reason" rows="3"
+                                              class="form-control">{{ $plan->special_reason }}</textarea>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-lg-4 col-sm-6" @if( !$plan->performer->need_course ) style="display: none"
-                             @endif data-courses>
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>مشخص کردن دوره ها</strong></label>
-                                <select name="courses[]" class="custom-select form-control select2-generate"
-                                        id="courses" multiple="multiple">
-                                    @foreach( $performerCourses as $course )
-                                        <option value="{{ $course->id }}" selected>{{ $course->title }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-sm-6" style="display: none" data-suggest-course>
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>پیشنهاد دوره</strong></label>
-                                <select name="suggests[]" class="custom-select form-control select2-generate"
-                                        id="suggests" multiple="multiple">
-
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row text-right border-bottom border-bottom-light-light mb-8">
-                        <div class="col-lg-4 col-sm-6">
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>طرح سوژه و ویژه می باشد؟</strong></label>
-                                <div class="radio-inline">
-                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                        <input type="radio" name="is_special" value="yes"
-                                               @if( $plan->is_special ) checked @endif data-is-special/>
-                                        <span class="mr-0 ml-2"></span>
-                                        بله
-                                    </label>
-                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                        <input type="radio" name="is_special" value="no"
-                                               @if( !$plan->is_special ) checked @endif data-is-special/>
-                                        <span class="mr-0 ml-2"></span>
-                                        خیر
-                                    </label>
+                        <div class="row text-right border-bottom border-bottom-light-light mb-8">
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>ویژگی نمایشگاهی</strong></label>
+                                    <div class="radio-inline">
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="is_exhibition" value="yes"
+                                                   @if( $plan->is_exhibition ) checked @endif data-is-exhibition/>
+                                            <span class="mr-0 ml-2"></span>
+                                            دارد
+                                        </label>
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="is_exhibition" value="no"
+                                                   @if( !$plan->is_exhibition ) checked @endif data-is-exhibition/>
+                                            <span class="mr-0 ml-2"></span>
+                                            ندارد
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-8 col-sm-6" @if( !$plan->is_special ) style="display: none"
-                             @endif data-special-resaon>
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>دلیل و کار شاخص طرح</strong></label>
-                                <textarea name="special_reason" rows="3"
-                                          class="form-control">{{ $plan->special_reason }}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row text-right border-bottom border-bottom-light-light mb-8">
-                        <div class="col-lg-4 col-sm-6">
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>ویژگی نمایشگاهی</strong></label>
-                                <div class="radio-inline">
-                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                        <input type="radio" name="is_exhibition" value="yes"
-                                               @if( $plan->is_exhibition ) checked @endif data-is-exhibition/>
-                                        <span class="mr-0 ml-2"></span>
-                                        دارد
-                                    </label>
-                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                        <input type="radio" name="is_exhibition" value="no"
-                                               @if( !$plan->is_exhibition ) checked @endif data-is-exhibition/>
-                                        <span class="mr-0 ml-2"></span>
-                                        ندارد
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        @if($plan->location_type=="ثبت نشده")
                             <div class="col-md-4 col-sm-12">
                                 <div class="form-group ">
                                     <label for="" class="form-label">نوع مکان طرح</label>
                                     <div class="radio-inline">
                                         <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                            <input type="radio" name="location_type" checked="checked"
+                                            <input type="radio" {{$plan->location_type=="شهری"?"checked":""}}  name="location_type"
                                                    value="شهری"/>
                                             <span class="mr-0 ml-2"></span>
                                             شهری
                                         </label>
                                         <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                            <input type="radio" name="location_type" value="روستایی"/>
+                                            <input type="radio" name="location_type"
+                                                   {{$plan->location_type=="روستایی"?"checked":""}}  value="روستایی"/>
                                             <span class="mr-0 ml-2"></span>
                                             روستایی
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                        @endif
-                        <div class="col-lg-4 col-sm-6" @if( !$plan->is_exhibition ) style="display: none"
-                             @endif data-exhibition-level>
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>سطح نمایشگاهی</strong></label>
-                                <div class="radio-inline">
-                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                        <input type="radio" name="exhibition_level" value="شهرستانی"
-                                               @if( $plan->exhibition_level == 'شهرستانی' ) checked @endif/>
-                                        <span class="mr-0 ml-2"></span>
-                                        شهرستانی
-                                    </label>
-                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                        <input type="radio" name="exhibition_level" value="استانی"
-                                               @if( $plan->exhibition_level == 'استانی' ) checked @endif/>
-                                        <span class="mr-0 ml-2"></span>
-                                        استانی
-                                    </label>
-                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                        <input type="radio" name="exhibition_level" value="کشوری"
-                                               @if( $plan->exhibition_level == 'کشوری' ) checked @endif/>
-                                        <span class="mr-0 ml-2"></span>
-                                        کشوری
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-6" @if( !$plan->is_exhibition ) style="display: none"
-                             @endif data-exhibition-desire>
-                            <div class="form-group">
-                                <label for="" class="form-label"><strong>تمایل مجری</strong></label>
-                                <div class="radio-inline">
-                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                        <input type="radio" name="exhibition_desire" value="کم"
-                                               @if( $plan->exhibition_desire == 'کم' ) checked @endif/>
-                                        <span class="mr-0 ml-2"></span>
-                                        کم
-                                    </label>
-                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                        <input type="radio" name="exhibition_desire" value="متوسط"
-                                               @if( $plan->exhibition_desire == 'متوسط' ) checked @endif/>
-                                        <span class="mr-0 ml-2"></span>
-                                        متوسط
-                                    </label>
-                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                        <input type="radio" name="exhibition_desire" value="زیاد"
-                                               @if( $plan->exhibition_desire == 'زیاد' ) checked @endif/>
-                                        <span class="mr-0 ml-2"></span>
-                                        زیاد
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row text-right">
-                        <div class="col-lg-12">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label for="" class="form-label"><strong>اشتغال زایی به جز مجری</strong></label>
-                                        <div class="radio-inline">
-                                            <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                                <input type="radio" name="has_employment" value="yes"
-                                                       @if( $plan->has_employment ) checked @endif data-has-employer/>
-                                                <span class="mr-0 ml-2"></span>
-                                                دارد
-                                            </label>
-                                            <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                                <input type="radio" name="has_employment" value="no"
-                                                       @if( !$plan->has_employment ) checked @endif data-has-employer/>
-                                                <span class="mr-0 ml-2"></span>
-                                                ندارد
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" @if( !$plan->has_employment ) style="display: none" @endif data-employers>
-                                <div class="accordion accordion-toggle-arrow w-100 text-right" id="employers">
-                                    @forelse($planEmployers as $employer)
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div class="card-title collapsed" data-toggle="collapse"
-                                                     data-target="#employers{{ $employer->id }}">
-                                                    {{ $employer->fullName }}
-                                                </div>
-                                            </div>
-                                            <div id="employers{{ $employer->id }}" class="collapse"
-                                                 data-parent="#employers">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-lg-4 col-sm-4 col-xs-5">
-                                                            <div class="form-group">
-                                                                <label for="nationalityCode"><strong>کد
-                                                                        ملی</strong></label>
-                                                                <input type="text" class="form-control"
-                                                                       name="employers[{{ $employer->id }}][nationalityCode]"
-                                                                       value="{{ $employer->nationalityCode }}"
-                                                                       id="nationalityCode" required>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4 col-sm-4">
-                                                            <div class="form-group">
-                                                                <label for="fullName" class="form-label"><strong>نام
-                                                                        خانوادگی</strong></label>
-                                                                <input type="text" class="form-control"
-                                                                       name="employers[{{ $employer->id }}][fullName]"
-                                                                       value="{{ $employer->fullName }}" id="fullName"
-                                                                       oninput="changeAccordionTitle(this)">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4 col-sm-4">
-                                                            <div class="form-group">
-                                                                <label for="supportStatus" class="form-label"><strong>وضعیت
-                                                                        مددجویی</strong></label>
-                                                                <select name="employers[{{ $employer->id }}][supportStatus]"
-                                                                        id="supportStatus" class="form-control">
-                                                                    <option value="مددجو"
-                                                                            @if( $employer->supportStatus == 'مددجو' ) selected @endif>
-                                                                        مددجو
-                                                                    </option>
-                                                                    <option value="غیر مددجو"
-                                                                            @if( $employer->supportStatus == 'غیر مددجو' ) selected @endif>
-                                                                        غیر مددجو
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4 col-sm-4">
-                                                            <div class="form-group">
-                                                                <label for="phone" class="form-label"><strong>شماره
-                                                                        تماس</strong></label>
-                                                                <input type="text" class="form-control"
-                                                                       name="employers[{{ $employer->id }}][phone]"
-                                                                       value="{{ $employer->phone }}" id="phone">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4 col-sm-4">
-                                                            <div class="form-group">
-                                                                <label for="employer_status" class="form-label"><strong>وضعیت
-                                                                        شاغل در طرح</strong></label>
-                                                                <input type="text" class="form-control"
-                                                                       name="employers[{{ $employer->id }}][employer_status]"
-                                                                       value="{{ $employer->employer_status }}"
-                                                                       id="employer_status">
-                                                                <select name="employers[{{ $employer->id }}][employer_status]"
-                                                                        id="employer_status" class="form-control">
-                                                                    <option value="تمام وقت"
-                                                                            @if( $employer->employer_status == 'تمام وقت' ) selected @endif>
-                                                                        تمام وقت
-                                                                    </option>
-                                                                    <option value="پاره وقت"
-                                                                            @if( $employer->employer_status == 'پاره وقت' ) selected @endif>
-                                                                        پاره وقت
-                                                                    </option>
-                                                                    <option value="ساعتی"
-                                                                            @if( $employer->employer_status == 'ساعتی' ) selected @endif>
-                                                                        ساعتی
-                                                                    </option>
-                                                                    <option value="موردی"
-                                                                            @if( $employer->employer_status == 'موردی' ) selected @endif>
-                                                                        موردی
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4 col-sm-4">
-                                                            <div class="form-group">
-                                                                <label for="start_date" class="form-label"><strong>تاریخ
-                                                                        شروع</strong></label>
-                                                                <input type="text" class="form-control persianDate"
-                                                                       name="employers[{{ $employer->id }}][start_date]"
-                                                                       value="{{ $employer->start_date }}"
-                                                                       id="start_date">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4 col-sm-4">
-                                                            <div class="form-group">
-                                                                <label for="gender"
-                                                                       class="form-label"><strong>جنسیت</strong></label>
-                                                                <div class="radio-inline" id="gender">
-                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                                                        <input type="radio"
-                                                                               name="employers[{{ $employer->id }}][gender]"
-                                                                               value="male" {{ $employer->gender == 'male' ? 'checked="checked"' : '' }}/>
-                                                                        <span class="mr-0 ml-2"></span>
-                                                                        مرد
-                                                                    </label>
-                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                                                        <input type="radio"
-                                                                               name="employers[{{ $employer->id }}][gender]"
-                                                                               value="female" {{ $employer->gender == 'female' ? 'checked="checked"' : '' }}/>
-                                                                        <span class="mr-0 ml-2"></span>
-                                                                        زن
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4 col-sm-4">
-                                                            <div class="form-group">
-                                                                <label for="paid_status" class="form-label"><strong>وضعیت
-                                                                        مزد بگیری</strong></label>
-                                                                <div class="radio-inline" id="paid_status">
-                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                                                        <input type="radio"
-                                                                               name="employers[{{ $employer->id }}][paid_status]"
-                                                                               value="employedWithSalary" {{ $employer->paid_status == 'employedWithSalary' ? 'checked="checked"' : '' }}/>
-                                                                        <span class="mr-0 ml-2"></span>
-                                                                        شاغل مزد بگیر
-                                                                    </label>
-                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                                                        <input type="radio"
-                                                                               name="employers[{{ $employer->id }}][paid_status]"
-                                                                               value="familyWithoutSalary" {{ $employer->paid_status == 'familyWithoutSalary' ? 'checked="checked"' : '' }}/>
-                                                                        <span class="mr-0 ml-2"></span>
-                                                                        کارکنان خانوادگی بدون مزد
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4 col-sm-4">
-                                                            <div class="form-group">
-                                                                <label for="is_insured"
-                                                                       class="form-label"><strong>بیمه</strong></label>
-                                                                <div class="radio-inline" id="is_insured">
-                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                                                        <input type="radio"
-                                                                               name="employers[{{ $employer->id }}][is_insured]"
-                                                                               value="yes" {{ $employer->is_insured == '1' ? 'checked="checked"' : '' }}/>
-                                                                        <span class="mr-0 ml-2"></span>
-                                                                        دارد
-                                                                    </label>
-                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                                                        <input type="radio"
-                                                                               name="employers[{{ $employer->id }}][is_insured]"
-                                                                               value="no" {{ $employer->is_insured == '0' ? 'checked="checked"' : '' }}/>
-                                                                        <span class="mr-0 ml-2"></span>
-                                                                        ندارد
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    @empty
-                                        {{--                                        <div class="card">--}}
-                                        {{--                                            <div class="card-header">--}}
-                                        {{--                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#employers0">--}}
-                                        {{--                                                    نام و نام خانوادگی--}}
-                                        {{--                                                </div>--}}
-                                        {{--                                            </div>--}}
-                                        {{--                                            <div id="employers0" class="collapse" data-parent="#employers">--}}
-                                        {{--                                                <div class="card-body">--}}
-                                        {{--                                                    <div class="row">--}}
-                                        {{--                                                        <div class="col-lg-4 col-sm-4 col-xs-5">--}}
-                                        {{--                                                            <div class="form-group">--}}
-                                        {{--                                                                <label for="nationalityCode"><strong>کد ملی</strong></label>--}}
-                                        {{--                                                                <input type="text" class="form-control" name="employers[0][nationalityCode]" id="nationalityCode" required>--}}
-                                        {{--                                                            </div>--}}
-                                        {{--                                                        </div>--}}
-                                        {{--                                                        <div class="col-lg-4 col-sm-4">--}}
-                                        {{--                                                            <div class="form-group">--}}
-                                        {{--                                                                <label for="firstName" class="form-label"><strong>نام</strong></label>--}}
-                                        {{--                                                                <input type="text" class="form-control" name="employers[0][firstName]" id="firstName" oninput="changeAccordionTitle(this)">--}}
-                                        {{--                                                            </div>--}}
-                                        {{--                                                        </div>--}}
-                                        {{--                                                        <div class="col-lg-4 col-sm-4">--}}
-                                        {{--                                                            <div class="form-group">--}}
-                                        {{--                                                                <label for="lastName" class="form-label"><strong>نام خانوادگی</strong></label>--}}
-                                        {{--                                                                <input type="text" class="form-control" name="employers[0][lastName]" id="lastName" oninput="changeAccordionTitle(this)">--}}
-                                        {{--                                                            </div>--}}
-                                        {{--                                                        </div>--}}
-                                        {{--                                                        <div class="col-lg-4 col-sm-4">--}}
-                                        {{--                                                            <div class="form-group">--}}
-                                        {{--                                                                <label for="supportStatus" class="form-label"><strong>وضعیت مددجویی</strong></label>--}}
-                                        {{--                                                                <input type="text" class="form-control" name="employers[0][supportStatus]" id="supportStatus">--}}
-                                        {{--                                                            </div>--}}
-                                        {{--                                                        </div>--}}
-                                        {{--                                                        <div class="col-lg-4 col-sm-4">--}}
-                                        {{--                                                            <div class="form-group">--}}
-                                        {{--                                                                <label for="phone" class="form-label"><strong>شماره تماس</strong></label>--}}
-                                        {{--                                                                <input type="text" class="form-control" name="employers[0][phone]" id="phone">--}}
-                                        {{--                                                            </div>--}}
-                                        {{--                                                        </div>--}}
-                                        {{--                                                        <div class="col-lg-4 col-sm-4">--}}
-                                        {{--                                                            <div class="form-group">--}}
-                                        {{--                                                                <label for="employer_status" class="form-label"><strong>وضعیت شاغل در طرح</strong></label>--}}
-                                        {{--                                                                <input type="text" class="form-control" name="employers[0][employer_status]" id="employer_status">--}}
-                                        {{--                                                            </div>--}}
-                                        {{--                                                        </div>--}}
-                                        {{--                                                        <div class="col-lg-4 col-sm-4">--}}
-                                        {{--                                                            <div class="form-group">--}}
-                                        {{--                                                                <label for="gender" class="form-label"><strong>جنسیت</strong></label>--}}
-                                        {{--                                                                <div class="radio-inline" id="gender">--}}
-                                        {{--                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">--}}
-                                        {{--                                                                        <input type="radio" name="employers[0][gender]" value="male"/>--}}
-                                        {{--                                                                        <span class="mr-0 ml-2"></span>--}}
-                                        {{--                                                                        مرد--}}
-                                        {{--                                                                    </label>--}}
-                                        {{--                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">--}}
-                                        {{--                                                                        <input type="radio" name="employers[0][gender]" value="female"/>--}}
-                                        {{--                                                                        <span class="mr-0 ml-2"></span>--}}
-                                        {{--                                                                        زن--}}
-                                        {{--                                                                    </label>--}}
-                                        {{--                                                                </div>--}}
-                                        {{--                                                            </div>--}}
-                                        {{--                                                        </div>--}}
-                                        {{--                                                        <div class="col-lg-4 col-sm-4">--}}
-                                        {{--                                                            <div class="form-group">--}}
-                                        {{--                                                                <label for="paid_status" class="form-label"><strong>وضعیت مزد بگیری</strong></label>--}}
-                                        {{--                                                                <div class="radio-inline" id="paid_status">--}}
-                                        {{--                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">--}}
-                                        {{--                                                                        <input type="radio" name="employers[0][paid_status]" value="employedWithSalary"/>--}}
-                                        {{--                                                                        <span class="mr-0 ml-2"></span>--}}
-                                        {{--                                                                        شاغل مزد بگیر--}}
-                                        {{--                                                                    </label>--}}
-                                        {{--                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">--}}
-                                        {{--                                                                        <input type="radio" name="employers[0][paid_status]" value="familyWithoutSalary"/>--}}
-                                        {{--                                                                        <span class="mr-0 ml-2"></span>--}}
-                                        {{--                                                                        کارکنان خانوادگی بدون مزد--}}
-                                        {{--                                                                    </label>--}}
-                                        {{--                                                                </div>--}}
-                                        {{--                                                            </div>--}}
-                                        {{--                                                        </div>--}}
-                                        {{--                                                        <div class="col-lg-4 col-sm-4">--}}
-                                        {{--                                                            <div class="form-group">--}}
-                                        {{--                                                                <label for="is_insured" class="form-label"><strong>بیمه</strong></label>--}}
-                                        {{--                                                                <div class="radio-inline" id="is_insured">--}}
-                                        {{--                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">--}}
-                                        {{--                                                                        <input type="radio" name="employers[0][is_insured]" value="yes"/>--}}
-                                        {{--                                                                        <span class="mr-0 ml-2"></span>--}}
-                                        {{--                                                                        دارد--}}
-                                        {{--                                                                    </label>--}}
-                                        {{--                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">--}}
-                                        {{--                                                                        <input type="radio" name="employers[0][is_insured]" value="no"/>--}}
-                                        {{--                                                                        <span class="mr-0 ml-2"></span>--}}
-                                        {{--                                                                        ندارد--}}
-                                        {{--                                                                    </label>--}}
-                                        {{--                                                                </div>--}}
-                                        {{--                                                            </div>--}}
-                                        {{--                                                        </div>--}}
-                                        {{--                                                        <div class="col-lg-4 col-sm-4">--}}
-                                        {{--                                                            <div class="form-group">--}}
-                                        {{--                                                                <label for="start_date" class="form-label"><strong>تاریخ شروع</strong></label>--}}
-                                        {{--                                                                <input type="text" class="form-control persianDate" name="employers[0][start_date]" id="start_date">--}}
-                                        {{--                                                            </div>--}}
-                                        {{--                                                        </div>--}}
-                                        {{--                                                    </div>--}}
-                                        {{--                                                </div>--}}
-                                        {{--                                            </div>--}}
-                                        {{--                                        </div>--}}
-                                    @endforelse
-                                </div>
-                                <button class="btn btn-primary mt-4" type="button" onclick="addEmployer()">اضافه کردن
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-lg-12">
-
-                            <div class="form-group text-right">
-                                <p for="" class="form-label text-right pt-3"><strong>مشکلات طرح</strong></p>
-                                <div class="radio-inline">
-                                    @foreach( \App\Models\Problem::where('plan_type',$plan->category)->get() as $problem )
-                                        <input type="checkbox" class="p-2" name="problems[]"
-                                               {{has_problem($plan->id,$problem->id)?"checked":""}}  value="{{ $problem->id }}"
-                                               id="{{ $problem->id }}problem">
-                                        <label class="mb-0 p-2 mt-1"
-                                               for="{{ $problem->id }}problem">{{$problem->problem}}
-
+                            <div class="col-lg-4 col-sm-6" @if( !$plan->is_exhibition ) style="display: none"
+                                 @endif data-exhibition-level>
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>سطح نمایشگاهی</strong></label>
+                                    <div class="radio-inline">
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="exhibition_level" value="شهرستانی"
+                                                   @if( $plan->exhibition_level == 'شهرستانی' ) checked @endif/>
+                                            <span class="mr-0 ml-2"></span>
+                                            شهرستانی
                                         </label>
-
-                                    @endforeach
-
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="exhibition_level" value="استانی"
+                                                   @if( $plan->exhibition_level == 'استانی' ) checked @endif/>
+                                            <span class="mr-0 ml-2"></span>
+                                            استانی
+                                        </label>
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="exhibition_level" value="کشوری"
+                                                   @if( $plan->exhibition_level == 'کشوری' ) checked @endif/>
+                                            <span class="mr-0 ml-2"></span>
+                                            کشوری
+                                        </label>
+                                    </div>
                                 </div>
-
+                            </div>
+                            <div class="col-lg-4 col-sm-6" @if( !$plan->is_exhibition ) style="display: none"
+                                 @endif data-exhibition-desire>
+                                <div class="form-group">
+                                    <label for="" class="form-label"><strong>تمایل مجری</strong></label>
+                                    <div class="radio-inline">
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="exhibition_desire" value="کم"
+                                                   @if( $plan->exhibition_desire == 'کم' ) checked @endif/>
+                                            <span class="mr-0 ml-2"></span>
+                                            کم
+                                        </label>
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="exhibition_desire" value="متوسط"
+                                                   @if( $plan->exhibition_desire == 'متوسط' ) checked @endif/>
+                                            <span class="mr-0 ml-2"></span>
+                                            متوسط
+                                        </label>
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="exhibition_desire" value="زیاد"
+                                                   @if( $plan->exhibition_desire == 'زیاد' ) checked @endif/>
+                                            <span class="mr-0 ml-2"></span>
+                                            زیاد
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="row">
-                                <div style="width: 100%" class="form repeater-default row align-items-center">
-                                    <div class="col-lg-11">
-                                        <div style="width: 100%" data-repeater-list="observe_files">
-                                            <div data-repeater-item>
-                                                <div class="row justify-content-between align-items-end text-right">
-                                                    <div class="col-lg-4 col-sm-5 col-xs-5">
-                                                        <label for="document"><strong>نوع مدرک</strong></label>
-                                                        <select name="document" id="document" class="form-control"
-                                                                required>
-                                                            @foreach($documents as $document)
-                                                                <option value="{{ $document->id }}">{{ $document->title }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
 
-                                                    <div class="col-lg-4 col-sm-5 col-xs-5">
-                                                        <label for="" class="form-label"><strong>بارگزاری
-                                                                فایل</strong></label>
-                                                        <input type="file" name="file"
-                                                               accept="image/*;capture=camera">
-                                                    </div>
-
-                                                    <div class="col-lg-2 col-sm-2 col-xs-2">
-                                                        <button class="btn btn-danger" data-repeater-delete
-                                                                type="button">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
+                        <div class="row text-right">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="" class="form-label"><strong>اشتغال زایی به جز
+                                                    مجری</strong></label>
+                                            <div class="radio-inline">
+                                                <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                                    <input type="radio" name="has_employment" value="yes"
+                                                           @if( $plan->has_employment ) checked
+                                                           @endif data-has-employer/>
+                                                    <span class="mr-0 ml-2"></span>
+                                                    دارد
+                                                </label>
+                                                <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                                    <input type="radio" name="has_employment" value="no"
+                                                           @if( !$plan->has_employment ) checked
+                                                           @endif data-has-employer/>
+                                                    <span class="mr-0 ml-2"></span>
+                                                    ندارد
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-1">
-                                        <button class="btn btn-primary d-flex" type="button" data-repeater-create>
-                                            <i class="fas fa-plus"></i>
-                                        </button>
+                                </div>
+                                <div class="row" @if( !$plan->has_employment ) style="display: none"
+                                     @endif data-employers>
+                                    <div class="accordion accordion-toggle-arrow w-100 text-right" id="employers">
+                                        @forelse($planEmployers as $employer)
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <div class="card-title collapsed" data-toggle="collapse"
+                                                         data-target="#employers{{ $employer->id }}">
+                                                        {{ $employer->fullName }}
+                                                    </div>
+                                                </div>
+                                                <div id="employers{{ $employer->id }}" class="collapse"
+                                                     data-parent="#employers">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-sm-4 col-xs-5">
+                                                                <div class="form-group">
+                                                                    <label for="nationalityCode"><strong>کد
+                                                                            ملی</strong></label>
+                                                                    <input type="text" class="form-control"
+                                                                           name="employers[{{ $employer->id }}][nationalityCode]"
+                                                                           value="{{ $employer->nationalityCode }}"
+                                                                           id="nationalityCode" required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label for="fullName" class="form-label"><strong>نام
+                                                                            خانوادگی</strong></label>
+                                                                    <input type="text" class="form-control"
+                                                                           name="employers[{{ $employer->id }}][fullName]"
+                                                                           value="{{ $employer->fullName }}"
+                                                                           id="fullName"
+                                                                           oninput="changeAccordionTitle(this)">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label for="supportStatus"
+                                                                           class="form-label"><strong>وضعیت
+                                                                            مددجویی</strong></label>
+                                                                    <select name="employers[{{ $employer->id }}][supportStatus]"
+                                                                            id="supportStatus" class="form-control">
+                                                                        <option value="مددجو"
+                                                                                @if( $employer->supportStatus == 'مددجو' ) selected @endif>
+                                                                            مددجو
+                                                                        </option>
+                                                                        <option value="غیر مددجو"
+                                                                                @if( $employer->supportStatus == 'غیر مددجو' ) selected @endif>
+                                                                            غیر مددجو
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label for="phone" class="form-label"><strong>شماره
+                                                                            تماس</strong></label>
+                                                                    <input type="text" class="form-control"
+                                                                           name="employers[{{ $employer->id }}][phone]"
+                                                                           value="{{ $employer->phone }}" id="phone">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label for="employer_status"
+                                                                           class="form-label"><strong>وضعیت
+                                                                            شاغل در طرح</strong></label>
+                                                                    <input type="text" class="form-control"
+                                                                           name="employers[{{ $employer->id }}][employer_status]"
+                                                                           value="{{ $employer->employer_status }}"
+                                                                           id="employer_status">
+                                                                    <select name="employers[{{ $employer->id }}][employer_status]"
+                                                                            id="employer_status" class="form-control">
+                                                                        <option value="تمام وقت"
+                                                                                @if( $employer->employer_status == 'تمام وقت' ) selected @endif>
+                                                                            تمام وقت
+                                                                        </option>
+                                                                        <option value="پاره وقت"
+                                                                                @if( $employer->employer_status == 'پاره وقت' ) selected @endif>
+                                                                            پاره وقت
+                                                                        </option>
+                                                                        <option value="ساعتی"
+                                                                                @if( $employer->employer_status == 'ساعتی' ) selected @endif>
+                                                                            ساعتی
+                                                                        </option>
+                                                                        <option value="موردی"
+                                                                                @if( $employer->employer_status == 'موردی' ) selected @endif>
+                                                                            موردی
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label for="start_date" class="form-label"><strong>تاریخ
+                                                                            شروع</strong></label>
+                                                                    <input type="text" class="form-control persianDate"
+                                                                           name="employers[{{ $employer->id }}][start_date]"
+                                                                           value="{{ $employer->start_date }}"
+                                                                           id="start_date">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label for="gender"
+                                                                           class="form-label"><strong>جنسیت</strong></label>
+                                                                    <div class="radio-inline" id="gender">
+                                                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                                                            <input type="radio"
+                                                                                   name="employers[{{ $employer->id }}][gender]"
+                                                                                   value="male" {{ $employer->gender == 'male' ? 'checked="checked"' : '' }}/>
+                                                                            <span class="mr-0 ml-2"></span>
+                                                                            مرد
+                                                                        </label>
+                                                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                                                            <input type="radio"
+                                                                                   name="employers[{{ $employer->id }}][gender]"
+                                                                                   value="female" {{ $employer->gender == 'female' ? 'checked="checked"' : '' }}/>
+                                                                            <span class="mr-0 ml-2"></span>
+                                                                            زن
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label for="paid_status" class="form-label"><strong>وضعیت
+                                                                            مزد بگیری</strong></label>
+                                                                    <div class="radio-inline" id="paid_status">
+                                                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                                                            <input type="radio"
+                                                                                   name="employers[{{ $employer->id }}][paid_status]"
+                                                                                   value="employedWithSalary" {{ $employer->paid_status == 'employedWithSalary' ? 'checked="checked"' : '' }}/>
+                                                                            <span class="mr-0 ml-2"></span>
+                                                                            شاغل مزد بگیر
+                                                                        </label>
+                                                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                                                            <input type="radio"
+                                                                                   name="employers[{{ $employer->id }}][paid_status]"
+                                                                                   value="familyWithoutSalary" {{ $employer->paid_status == 'familyWithoutSalary' ? 'checked="checked"' : '' }}/>
+                                                                            <span class="mr-0 ml-2"></span>
+                                                                            کارکنان خانوادگی بدون مزد
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label for="is_insured"
+                                                                           class="form-label"><strong>بیمه</strong></label>
+                                                                    <div class="radio-inline" id="is_insured">
+                                                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                                                            <input type="radio"
+                                                                                   name="employers[{{ $employer->id }}][is_insured]"
+                                                                                   value="yes" {{ $employer->is_insured == '1' ? 'checked="checked"' : '' }}/>
+                                                                            <span class="mr-0 ml-2"></span>
+                                                                            دارد
+                                                                        </label>
+                                                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                                                            <input type="radio"
+                                                                                   name="employers[{{ $employer->id }}][is_insured]"
+                                                                                   value="no" {{ $employer->is_insured == '0' ? 'checked="checked"' : '' }}/>
+                                                                            <span class="mr-0 ml-2"></span>
+                                                                            ندارد
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        @empty
+                                            {{--                                        <div class="card">--}}
+                                            {{--                                            <div class="card-header">--}}
+                                            {{--                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#employers0">--}}
+                                            {{--                                                    نام و نام خانوادگی--}}
+                                            {{--                                                </div>--}}
+                                            {{--                                            </div>--}}
+                                            {{--                                            <div id="employers0" class="collapse" data-parent="#employers">--}}
+                                            {{--                                                <div class="card-body">--}}
+                                            {{--                                                    <div class="row">--}}
+                                            {{--                                                        <div class="col-lg-4 col-sm-4 col-xs-5">--}}
+                                            {{--                                                            <div class="form-group">--}}
+                                            {{--                                                                <label for="nationalityCode"><strong>کد ملی</strong></label>--}}
+                                            {{--                                                                <input type="text" class="form-control" name="employers[0][nationalityCode]" id="nationalityCode" required>--}}
+                                            {{--                                                            </div>--}}
+                                            {{--                                                        </div>--}}
+                                            {{--                                                        <div class="col-lg-4 col-sm-4">--}}
+                                            {{--                                                            <div class="form-group">--}}
+                                            {{--                                                                <label for="firstName" class="form-label"><strong>نام</strong></label>--}}
+                                            {{--                                                                <input type="text" class="form-control" name="employers[0][firstName]" id="firstName" oninput="changeAccordionTitle(this)">--}}
+                                            {{--                                                            </div>--}}
+                                            {{--                                                        </div>--}}
+                                            {{--                                                        <div class="col-lg-4 col-sm-4">--}}
+                                            {{--                                                            <div class="form-group">--}}
+                                            {{--                                                                <label for="lastName" class="form-label"><strong>نام خانوادگی</strong></label>--}}
+                                            {{--                                                                <input type="text" class="form-control" name="employers[0][lastName]" id="lastName" oninput="changeAccordionTitle(this)">--}}
+                                            {{--                                                            </div>--}}
+                                            {{--                                                        </div>--}}
+                                            {{--                                                        <div class="col-lg-4 col-sm-4">--}}
+                                            {{--                                                            <div class="form-group">--}}
+                                            {{--                                                                <label for="supportStatus" class="form-label"><strong>وضعیت مددجویی</strong></label>--}}
+                                            {{--                                                                <input type="text" class="form-control" name="employers[0][supportStatus]" id="supportStatus">--}}
+                                            {{--                                                            </div>--}}
+                                            {{--                                                        </div>--}}
+                                            {{--                                                        <div class="col-lg-4 col-sm-4">--}}
+                                            {{--                                                            <div class="form-group">--}}
+                                            {{--                                                                <label for="phone" class="form-label"><strong>شماره تماس</strong></label>--}}
+                                            {{--                                                                <input type="text" class="form-control" name="employers[0][phone]" id="phone">--}}
+                                            {{--                                                            </div>--}}
+                                            {{--                                                        </div>--}}
+                                            {{--                                                        <div class="col-lg-4 col-sm-4">--}}
+                                            {{--                                                            <div class="form-group">--}}
+                                            {{--                                                                <label for="employer_status" class="form-label"><strong>وضعیت شاغل در طرح</strong></label>--}}
+                                            {{--                                                                <input type="text" class="form-control" name="employers[0][employer_status]" id="employer_status">--}}
+                                            {{--                                                            </div>--}}
+                                            {{--                                                        </div>--}}
+                                            {{--                                                        <div class="col-lg-4 col-sm-4">--}}
+                                            {{--                                                            <div class="form-group">--}}
+                                            {{--                                                                <label for="gender" class="form-label"><strong>جنسیت</strong></label>--}}
+                                            {{--                                                                <div class="radio-inline" id="gender">--}}
+                                            {{--                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">--}}
+                                            {{--                                                                        <input type="radio" name="employers[0][gender]" value="male"/>--}}
+                                            {{--                                                                        <span class="mr-0 ml-2"></span>--}}
+                                            {{--                                                                        مرد--}}
+                                            {{--                                                                    </label>--}}
+                                            {{--                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">--}}
+                                            {{--                                                                        <input type="radio" name="employers[0][gender]" value="female"/>--}}
+                                            {{--                                                                        <span class="mr-0 ml-2"></span>--}}
+                                            {{--                                                                        زن--}}
+                                            {{--                                                                    </label>--}}
+                                            {{--                                                                </div>--}}
+                                            {{--                                                            </div>--}}
+                                            {{--                                                        </div>--}}
+                                            {{--                                                        <div class="col-lg-4 col-sm-4">--}}
+                                            {{--                                                            <div class="form-group">--}}
+                                            {{--                                                                <label for="paid_status" class="form-label"><strong>وضعیت مزد بگیری</strong></label>--}}
+                                            {{--                                                                <div class="radio-inline" id="paid_status">--}}
+                                            {{--                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">--}}
+                                            {{--                                                                        <input type="radio" name="employers[0][paid_status]" value="employedWithSalary"/>--}}
+                                            {{--                                                                        <span class="mr-0 ml-2"></span>--}}
+                                            {{--                                                                        شاغل مزد بگیر--}}
+                                            {{--                                                                    </label>--}}
+                                            {{--                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">--}}
+                                            {{--                                                                        <input type="radio" name="employers[0][paid_status]" value="familyWithoutSalary"/>--}}
+                                            {{--                                                                        <span class="mr-0 ml-2"></span>--}}
+                                            {{--                                                                        کارکنان خانوادگی بدون مزد--}}
+                                            {{--                                                                    </label>--}}
+                                            {{--                                                                </div>--}}
+                                            {{--                                                            </div>--}}
+                                            {{--                                                        </div>--}}
+                                            {{--                                                        <div class="col-lg-4 col-sm-4">--}}
+                                            {{--                                                            <div class="form-group">--}}
+                                            {{--                                                                <label for="is_insured" class="form-label"><strong>بیمه</strong></label>--}}
+                                            {{--                                                                <div class="radio-inline" id="is_insured">--}}
+                                            {{--                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">--}}
+                                            {{--                                                                        <input type="radio" name="employers[0][is_insured]" value="yes"/>--}}
+                                            {{--                                                                        <span class="mr-0 ml-2"></span>--}}
+                                            {{--                                                                        دارد--}}
+                                            {{--                                                                    </label>--}}
+                                            {{--                                                                    <label class="radio radio-outline radio-primary mr-0 ml-4">--}}
+                                            {{--                                                                        <input type="radio" name="employers[0][is_insured]" value="no"/>--}}
+                                            {{--                                                                        <span class="mr-0 ml-2"></span>--}}
+                                            {{--                                                                        ندارد--}}
+                                            {{--                                                                    </label>--}}
+                                            {{--                                                                </div>--}}
+                                            {{--                                                            </div>--}}
+                                            {{--                                                        </div>--}}
+                                            {{--                                                        <div class="col-lg-4 col-sm-4">--}}
+                                            {{--                                                            <div class="form-group">--}}
+                                            {{--                                                                <label for="start_date" class="form-label"><strong>تاریخ شروع</strong></label>--}}
+                                            {{--                                                                <input type="text" class="form-control persianDate" name="employers[0][start_date]" id="start_date">--}}
+                                            {{--                                                            </div>--}}
+                                            {{--                                                        </div>--}}
+                                            {{--                                                    </div>--}}
+                                            {{--                                                </div>--}}
+                                            {{--                                            </div>--}}
+                                            {{--                                        </div>--}}
+                                        @endforelse
                                     </div>
+                                    <button class="btn btn-primary mt-4" type="button" onclick="addEmployer()">اضافه
+                                        کردن
+                                    </button>
                                 </div>
                             </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-lg-12">
 
+                                <div class="form-group text-right">
+                                    <p for="" class="form-label text-right pt-3"><strong>مشکلات طرح</strong></p>
+                                    <div class="radio-inline">
+                                        @foreach( \App\Models\Problem::where('plan_type',$plan->category)->get() as $problem )
+                                            <div class="d-block">
+                                                <label class="mb-0 p-2 mt-1"
+                                                       for="{{ $problem->id }}problem">{{$problem->problem}}
+
+                                                </label>
+                                                <input type="checkbox" class="p-2" name="problems[]"
+                                                       {{has_problem($plan->id,$problem->id)?"checked":""}}  value="{{ $problem->id }}"
+                                                       id="{{ $problem->id }}problem">
+
+                                                @if(!$loop->last)
+                                                    <span class="mt-1 p-2">|</span>
+                                                @endif
+                                            </div>
+                                        @endforeach
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-12">
                                 <div class="row">
                                     <div style="width: 100%" class="form repeater-default row align-items-center">
-                                        <label for="" class="form-label"><strong>توضیحات</strong></label>
-                                        <textarea name="description" rows="3"
-                                                  class="form-control">{{ $plan->description }}</textarea>
+                                        <div class="col-lg-11">
+                                            <div style="width: 100%" data-repeater-list="observe_files">
+                                                <div data-repeater-item>
+                                                    <div class="row justify-content-between align-items-end text-right">
+                                                        <div class="col-lg-4 col-sm-5 col-xs-5">
+                                                            <label for="document"><strong>نوع مدرک</strong></label>
+                                                            <select name="document" id="document" class="form-control"
+                                                                    required>
+                                                                @foreach($documents as $document)
+                                                                    <option value="{{ $document->id }}">{{ $document->title }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-lg-4 col-sm-5 col-xs-5">
+                                                            <label for="" class="form-label"><strong>بارگزاری
+                                                                    فایل</strong></label>
+                                                            <input type="file" name="file"
+                                                                   accept="image/*;capture=camera">
+                                                        </div>
+
+                                                        <div class="col-lg-2 col-sm-2 col-xs-2">
+                                                            <button class="btn btn-danger" data-repeater-delete
+                                                                    type="button">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <button class="btn btn-primary d-flex" type="button" data-repeater-create>
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div style="width: 100%" class="form repeater-default row align-items-center">
+                                            <label for="" class="form-label"><strong>توضیحات</strong></label>
+                                            <textarea name="description" rows="3"
+                                                      class="form-control">{{ $plan->description }}</textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="card-footer text-right">
+                        <button type="submit" class="btn btn-primary">ثبت بازدید</button>
+                    </div>
                 </div>
-                <div class="card-footer text-right">
-                    <button type="submit" class="btn btn-primary">ثبت بازدید</button>
-                </div>
-            </div>
-        </form>
+            </form>
+        @endif
 
         <div class="card card-custom gutter-b" id="planDocuments">
             <div class="card-header">
@@ -867,6 +947,19 @@
         if (net_worth_inp.value > 0) {
             document.getElementById('monthly_income').innerText = (monthly_income.value).num2persian();
         }
+
+
+        let installment = document.getElementsByName('installment')[0];
+        if (installment.value > 0) {
+            document.getElementById('installment').innerText = (installment.value).num2persian();
+        }
+
+
+        let loan_amount = document.getElementsByName('loan_amount')[0];
+        if (installment.value > 0) {
+            document.getElementById('loan_amount').innerText = (loan_amount.value).num2persian();
+        }
+
         monthly_income.addEventListener('change', function (e) {
             document.getElementById('monthly_income').innerText = (e.target.value).num2persian();
         });
@@ -885,6 +978,21 @@
         monthly_charge.addEventListener('keyup', function (e) {
             document.getElementById('monthly_charge').innerText = (e.target.value).num2persian();
         });
+
+
+        loan_amount.addEventListener('keyup', function (e) {
+            document.getElementById('loan_amount').innerText = (e.target.value).num2persian();
+        });
+        installment.addEventListener('keyup', function (e) {
+            document.getElementById('installment').innerText = (e.target.value).num2persian();
+        });
+        loan_amount.addEventListener('change', function (e) {
+            document.getElementById('loan_amount').innerText = (e.target.value).num2persian();
+        });
+        installment.addEventListener('change', function (e) {
+            document.getElementById('installment').innerText = (e.target.value).num2persian();
+        });
+
 
         document.querySelectorAll('[data-remove]').forEach(item => {
             item.addEventListener('click', e => {
@@ -1029,9 +1137,9 @@
             })
         }
 
-        document.querySelector('form').addEventListener('submit', e => {
+        document.querySelector('#nezarat').addEventListener('submit', e => {
             e.preventDefault();
-            let formData = new FormData(document.querySelector('form'));
+            let formData = new FormData(document.querySelector('#nezarat'));
             for (const pair of documentsFormData.entries()) {
                 formData.append(pair[0], pair[1]);
             }

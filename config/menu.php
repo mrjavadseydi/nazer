@@ -40,6 +40,11 @@ return [
             'permission' => 'plans'
         ],
         [
+            'title' => 'لیست طرح ها غیر فعال',
+            'url' => '/dashboard/plans?hold=true',
+            'permission' => 'plans'
+        ],
+        [
             'title' => 'بازدید های انجام شده',
             'url' => '/dashboard/observes/done',
             'permission' => 'done-observes'

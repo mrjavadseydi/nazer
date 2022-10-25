@@ -31,9 +31,9 @@ class Problems extends LivewireDatatable
                 return $this->counter++;
             })->label('ردیف')->alignRight()->headerAlignCenter(),
 
-            Column::name('problem')->label('عنوان مشکل')->alignRight()->editable()->headerAlignCenter(),
-            Column::name('plan_type')->label('دسته مشکل')->alignRight()->editable()->headerAlignCenter(),
-            Column::name('end_value')->label('مقدار bpms')->alignRight()->editable()->headerAlignCenter(),
+            Column::name('problem')->label('عنوان مشکل')->alignRight()->editable()->filterable()->headerAlignCenter(),
+            Column::name('plan_type')->label('دسته مشکل')->alignRight()->editable()->filterable()->headerAlignCenter(),
+            Column::name('end_value')->label('مقدار bpms')->alignRight()->filterable()->editable()->headerAlignCenter(),
 
             Column::callback(['id'], function ($id){
                 return view('livewire.problem-datatable', compact('id'));

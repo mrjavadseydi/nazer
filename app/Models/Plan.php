@@ -53,4 +53,7 @@ class Plan extends Model
     {
         return $this->belongsTo(AreaCity::class);
     }
+    public function scopeActive($query,$status=false){
+        return $query->where('on_hold',$status);
+    }
 }

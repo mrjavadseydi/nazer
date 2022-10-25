@@ -17,6 +17,8 @@ class Observes extends LivewireDatatable
 {
     public $planid, $supervisorid, $persianfrom, $persianto;
     private $counter = 1;
+    public $perPage = 50;
+    public $hideable = 'select';
 
     public function builder()
     {
