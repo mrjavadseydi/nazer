@@ -39,10 +39,13 @@ class Organizations extends LivewireDatatable
                 return count($ob);
             })->label('بازدید های انجام شده')->alignRight()->headerAlignCenter(),
 
-//            Column::callback(['id','code'], function ($id){
-//                return Plan::where('organization_id', $id)->count();
-//            })->label('تعداد طرح ها')->alignRight()->headerAlignCenter(),
-//
+            Column::callback(['id','updated_at','code'], function ($ida){
+                $ob =  Observe::query()->whereHas('plan',function ($q) use($ida){
+                    $q->where('organization_id',$ida)->where('on_bpms',true);
+                })->get();
+                return count($ob);
+            })->label('ثبت bpms')->alignRight()->headerAlignCenter(),
+
             Column::callback(['id'], function($id){
                 return view('livewire.organizations-datatable', compact('id'));
             })->label('عملیات')->alignRight()->headerAlignCenter()
