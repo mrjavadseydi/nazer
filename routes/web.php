@@ -93,6 +93,8 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::resource('bank',\App\Http\Controllers\BankController::class)->except('show');
     Route::resource('branches',\App\Http\Controllers\BankBranchController::class)->except('show');
     Route::post('plans/report/problem/{id}',[\App\Http\Controllers\PlanController::class,'holdPlan'])->name('report.problem');
+    Route::get('/supervisors-change/{id}',[\App\Http\Controllers\ChangeSupervisorController::class,'index'])->name('change-supervisor.index');
+    Route::post('/supervisors-change/{id}',[\App\Http\Controllers\ChangeSupervisorController::class,'store'])->name('change-supervisor.store');
     Route::get('/remove_cache', function () {
         if (!auth()->user()->isAdmin)
             abort(403);
