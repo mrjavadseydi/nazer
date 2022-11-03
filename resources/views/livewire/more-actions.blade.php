@@ -31,6 +31,12 @@
                             <span class="navi-text">اطلاعات پرونده</span>
                         </button>
                     </a>
+                    <a href="{{route('plans.edit',$id)}}" class="navi-link">
+                        <button type="button">
+                            <span class="navi-icon"><i class="la la-pen"></i></span>
+                            <span class="navi-text">ویرایش پرونده</span>
+                        </button>
+                    </a>
                 @endif
                 @if(!\App\Models\Plan::where('id',$id)->first()->on_hold)
                     <a href="#" class="navi-link">

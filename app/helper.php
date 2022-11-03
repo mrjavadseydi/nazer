@@ -51,7 +51,12 @@ if( !function_exists('en2fa') ){
 
 if( !function_exists('shamsi2miladi') ){
     function shamsi2miladi($dateFormat, $dateString){
-        return Jalalian::fromFormat($dateFormat, $dateString)->toCarbon();
+        try {
+            return Jalalian::fromFormat($dateFormat, $dateString)->toCarbon();
+
+        }catch (Exception $e){
+            return  "";
+        }
     }
 }
 

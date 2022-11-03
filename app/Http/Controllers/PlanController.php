@@ -67,9 +67,7 @@ class PlanController extends Controller
         $plan = new Plan();
         $plan->title = $planInfo['title'];
         $plan->category = $planInfo['category'];
-//        $plan->tags = $planInfo['tags'];
         $plan->organization_id = $planInfo['organization'];
-//        $plan->distance = $planInfo['distance'];
         $plan->start_date = shamsi2miladi('Y/m/d', fa2en($performerInfo['start_date']));
         $plan->level = $planInfo['level'];
         $plan->address = $planInfo['address'];
@@ -101,7 +99,10 @@ class PlanController extends Controller
      */
     public function edit($id)
     {
-        //
+        $plan = Plan::find($id);
+        $organizations = Organization::all();
+        $categories = Plan::groupBy('category')->pluck('category');
+        return view('pages.plans.add', compact('organizations', 'categories','plan'));
     }
 
     /**
@@ -113,7 +114,36 @@ class PlanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $performerInfo = $request->performer;
+        $planInfo = $request->plan;
+
+        $performer = Plan::find($id)->performer;
+        $performer->firstName = $performerInfo['firstName'];
+        $performer->lastName = $performerInfo['lastName'];
+        $performer->nationalityCode = $performerInfo['nationalityCode'];
+        $performer->birthday = $performerInfo['birthday'];
+
+        $performer->phone = $performerInfo['phone'];
+        if ($request->filled('second_number')) {
+            $performer->second_number = $performerInfo['second_number'];
+        }
+        $performer->gender = $performerInfo['gender'];
+        $performer->under_support = $performerInfo['support'] == 'on';
+        $performer->save();
+
+        $plan = Plan::find($id);
+        $plan->title = $planInfo['title'];
+        $plan->category = $planInfo['category'];
+        $plan->organization_id = $planInfo['organization'];
+        $plan->start_date = shamsi2miladi('Y/m/d', fa2en($performerInfo['start_date']));
+        $plan->level = $planInfo['level'];
+        $plan->address = $planInfo['address'];
+        $plan->implement_method = $planInfo['implement_method'];
+        $plan->performer_id = $performer->id;
+        $plan->location_type = $planInfo['location_type'];
+        $plan->save();
+
+        return redirect()->route('plans.index');
     }
 
     /**
