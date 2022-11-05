@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\PlanObserve;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -12,8 +13,9 @@ use Illuminate\Database\Query\Builder;
  */
 class Plan extends Model
 {
-    use HasFactory;
+    use HasFactory,PlanObserve;
     protected $guarded = [];
+    protected $appends = ['next'];
     public function performer()
     {
         return $this->belongsTo(Performer::class);
@@ -55,5 +57,8 @@ class Plan extends Model
     }
     public function scopeActive($query,$status=false){
         return $query->where('on_hold',$status);
+    }
+    public function getNextAttribute(){
+        return $this->nextObserve();
     }
 }

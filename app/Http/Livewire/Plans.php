@@ -26,6 +26,7 @@ class Plans extends LivewireDatatable
     public $supervisorid;
     public $hideable = 'select';
     public $active;
+
     public function builder()
     {
         $user = Auth::user();
@@ -139,6 +140,21 @@ class Plans extends LivewireDatatable
                     return null;
                 return miladi2shamsi('Y/m/d', $lastObserveDate);
             })->label("آخرین بازدید")->alignRight()->headerAlignCenter(),
+            Column::callback(['plans.id','plans.last_observe_date','plans.start_date'], function ($id){
+                $now = Jalalian::now();
+                $next = Plan::find($id)->next;
+                if ($next==-1){
+                    return "خاتمه یافته";
+                }
+                if ($now<$next){
+                    return $next;
+                }elseif($now->addDays(15)<$next){
+                    return "<span class='text-warning'>$next</span>";
+
+                }else{
+                    return "<span class='text-danger'>بازدید فوری</span>";
+                }
+            })->label("بازدید بعدی")->alignRight()->headerAlignCenter()->unsortable(),
             Column::name('id')->label('انجام شده')->alignRight()->headerAlignCenter()->view('components.done')->exportCallback(function ($value){
                 return \App\Models\Observe::where('plan_id', $value)->get()->count() ?? 0;
             }),
