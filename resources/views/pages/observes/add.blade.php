@@ -423,25 +423,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-12">
-                                <div class="form-group ">
-                                    <label for="" class="form-label">نوع مکان طرح</label>
-                                    <div class="radio-inline">
-                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                            <input type="radio" {{$plan->location_type=="شهری"?"checked":""}}  name="location_type"
-                                                   value="شهری"/>
-                                            <span class="mr-0 ml-2"></span>
-                                            شهری
-                                        </label>
-                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                            <input type="radio" name="location_type"
-                                                   {{$plan->location_type=="روستایی"?"checked":""}}  value="روستایی"/>
-                                            <span class="mr-0 ml-2"></span>
-                                            روستایی
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
+
                             <div class="col-lg-4 col-sm-6" @if( !$plan->is_exhibition ) style="display: none"
                                  @endif data-exhibition-level>
                                 <div class="form-group">
@@ -468,6 +450,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-lg-4 col-sm-6" @if( !$plan->is_exhibition ) style="display: none"
                                  @endif data-exhibition-desire>
                                 <div class="form-group">
@@ -490,6 +473,25 @@
                                                    @if( $plan->exhibition_desire == 'زیاد' ) checked @endif/>
                                             <span class="mr-0 ml-2"></span>
                                             زیاد
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group ">
+                                    <label for="" class="form-label">نوع مکان طرح</label>
+                                    <div class="radio-inline">
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" {{$plan->location_type=="شهری"?"checked":""}}  name="location_type"
+                                                   value="شهری"/>
+                                            <span class="mr-0 ml-2"></span>
+                                            شهری
+                                        </label>
+                                        <label class="radio radio-outline radio-primary mr-0 ml-4">
+                                            <input type="radio" name="location_type"
+                                                   {{$plan->location_type=="روستایی"?"checked":""}}  value="روستایی"/>
+                                            <span class="mr-0 ml-2"></span>
+                                            روستایی
                                         </label>
                                     </div>
                                 </div>

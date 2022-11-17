@@ -4,11 +4,7 @@
 @section('dashboard_content')
 
     <div class="container-fluid text-right">
-        @if(auth()->user()->is_admin)
-            <div class="container-fluid text-right p-0">
-                <p class="alert alert-danger">سلام ! یادم بود</p>
-            </div>
-        @endif
+
         <form action="{{ route('change-supervisor.store',request()->id) }}"
               method="POST">
             @csrf

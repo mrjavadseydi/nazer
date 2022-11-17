@@ -6,6 +6,7 @@ use App\Models\AreaCity;
 use App\Models\Observe;
 use App\Models\Plan;
 use App\Models\Supervisor;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class Plans extends LivewireDatatable
     public $supervisorid;
     public $hideable = 'select';
     public $active;
-
+    public $need_observe;
     public function builder()
     {
         $user = Auth::user();
@@ -62,7 +63,10 @@ class Plans extends LivewireDatatable
 //                dd(DB::raw($join->get));
             });
         $plans = $plans->where('on_hold',$this->active);
+        if ($this->need_observe==1){
+            $plans = $plans->where('next_observe','<',now()->addDays(14))->where('next_observe','!=','0000-00-00');
 
+        }
         return $plans;
     }
 
@@ -81,7 +85,7 @@ class Plans extends LivewireDatatable
             })->exportCallback(function (){
                 return "";
             }),
-            Column::name('organizations.title')->label("اداره")->alignRight()->headerAlignCenter(),
+            Column::name('organizations.title')->label("اداره")->alignRight()->filterable()->headerAlignCenter(),
             Column::name('performers.nationalityCode')->label("کد ملی")->alignRight()->headerAlignCenter()->filterable(),
 
             Column::name('performers.firstName')->label("نام")->alignRight()->headerAlignCenter()->filterable(),
@@ -140,21 +144,23 @@ class Plans extends LivewireDatatable
                     return null;
                 return miladi2shamsi('Y/m/d', $lastObserveDate);
             })->label("آخرین بازدید")->alignRight()->headerAlignCenter(),
-            Column::callback(['plans.id','plans.last_observe_date','plans.start_date'], function ($id){
-                $now = Jalalian::now();
-                $next = Plan::find($id)->next;
-                if ($next==-1){
+            Column::callback(['plans.next_observe'], function ($nextObserve){
+                if ($nextObserve=="0000-00-00"){
                     return "خاتمه یافته";
                 }
-                if ($now<$next){
+                $carbon = new Carbon($nextObserve);
+                $next = Jalalian::fromCarbon($carbon)->format('Y/m/d');
+                $now = Carbon::now();
+
+                if ($now<$carbon){
                     return $next;
-                }elseif($now->addDays(15)<$next){
+                }elseif($now->addDays(15)<$carbon){
                     return "<span class='text-warning'>$next</span>";
 
                 }else{
                     return "<span class='text-danger'>بازدید فوری</span>";
                 }
-            })->label("بازدید بعدی")->alignRight()->headerAlignCenter()->unsortable(),
+            })->label("بازدید بعدی")->alignRight()->headerAlignCenter(),
             Column::name('id')->label('انجام شده')->alignRight()->headerAlignCenter()->view('components.done')->exportCallback(function ($value){
                 return \App\Models\Observe::where('plan_id', $value)->get()->count() ?? 0;
             }),

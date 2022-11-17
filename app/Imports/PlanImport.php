@@ -84,10 +84,10 @@ class PlanImport implements ToCollection
             }
 
             $performer->nationalityCode = $row[1] == '' ? 0 : $row[1];
-            $performer->firstName = $row[2];
-            $performer->lastName = $row[3];
-            $performer->gender =  'male';
-//            $performer->gender = $row[9] == 'مرد' ? 'male' : 'female';
+            $performer->firstName = $row[3];
+            $performer->lastName = $row[2];
+//            $performer->gender =  'male';
+            $performer->gender = $row[9] == 'مرد' ? 'male' : 'female';
             $performer->phone = $row[11];
             $performer->save();
 
@@ -95,6 +95,9 @@ class PlanImport implements ToCollection
              * Convert arabic ي to ی
              */
             $status = replace_arabic_with_persian_char($row[6]);
+            if ($status==null){
+                $status = '';
+            }
             $sss = replace_arabic_with_persian_char($row[13]);
             $implement = replace_arabic_with_persian_char($row[14]);
 
@@ -125,15 +128,15 @@ class PlanImport implements ToCollection
                 $plan->performer_id = $performer->id;
 
                 if( isset($row[12]) and $row[12] != '' ){
-                    $date = fa2en($row[12]."/01/01");
+                    $date = fa2en($row[12]);
                     $expiration = shamsi2miladi('Y/m/d', $date);
                     $last_observe_date = $expiration->toDate();
                     $plan->last_observe_date = $last_observe_date;
                 }
-                if( isset($row[16]) and $row[16] != '' ){
-                    /**
-                     * assign supervisor to plan
-                     */
+//                if( isset($row[16]) and $row[16] != '' ){
+//                    /**
+//                     * assign supervisor to plan
+//                     */
 //                    $planSupervisor = $plan->supervisor;
 //                    $excelSupervisorInSystem = Supervisor::where('nationalityCode', $row[16])->first();
 //
@@ -152,8 +155,8 @@ class PlanImport implements ToCollection
 //                    $supervisor->fullName = $row[15];
 //                    $supervisor->nationalityCode = $row[16];
 //                    $supervisor->save();
-                }
-                $plan->supervisor_id =1;
+//                }
+                $plan->supervisor_id =24;
                 $plan->save();
             }
             catch (\Exception $exception){

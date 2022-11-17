@@ -3,23 +3,24 @@
 namespace App\Console\Commands;
 
 use App\Models\Plan;
+use App\Models\Supervisor;
 use Illuminate\Console\Command;
 
-class UpldateLocationType extends Command
+class EmergencySMSCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'location:update';
+    protected $signature = 'sms:emergency';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'update location type';
+    protected $description = 'send Emergency observe sms';
 
     /**
      * Create a new command instance.
@@ -38,10 +39,13 @@ class UpldateLocationType extends Command
      */
     public function handle()
     {
-
-        Plan::where('address','like',"%روستا%")->update(['location_type'=>'روستایی']);
-//        Plan::where(credit
-        Plan::where('address','not like',"%روستا%")->update(['location_type'=>'شهری']);
+        $supervisors = Supervisor::all();
+        foreach ($supervisors as $supervisor){
+            $needObserve = Plan::where('supervisor_id',$supervisor->id)->where('next_observe','<',now())->count();
+            if ($needObserve>0){
+               sendSms('278fg3uwdks8809',fa2en($supervisor->phone),['name'=>$supervisor->fullName,'count'=>$needObserve]);
+            }
+        }
         return 0;
     }
 }

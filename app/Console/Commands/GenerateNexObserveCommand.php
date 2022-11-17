@@ -2,24 +2,23 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Plan;
 use Illuminate\Console\Command;
 
-class UpldateLocationType extends Command
+class GenerateNexObserveCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'location:update';
+    protected $signature = 'next:observe';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'update location type';
+    protected $description = 'Command description';
 
     /**
      * Create a new command instance.
@@ -38,10 +37,13 @@ class UpldateLocationType extends Command
      */
     public function handle()
     {
-
-        Plan::where('address','like',"%روستا%")->update(['location_type'=>'روستایی']);
-//        Plan::where(credit
-        Plan::where('address','not like',"%روستا%")->update(['location_type'=>'شهری']);
+        $this->output->progressStart(\App\Models\Plan::count());
+        foreach (\App\Models\Plan::all() as $plan){
+            $plan->next_observe = $plan->miladiNextObserve();
+            $plan->save();
+            $this->output->progressAdvance();
+        }
+        $this->output->progressFinish();
         return 0;
     }
 }

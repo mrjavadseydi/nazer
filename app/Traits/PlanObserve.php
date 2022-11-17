@@ -79,4 +79,39 @@ trait PlanObserve
 
 
     }
+    public function miladiNextObserve()
+    {
+        $months = $this->types[$this->category];
+        if (is_null($this->start_date)&&is_null($this->last_observe_date)){
+            return "2022-03-21";
+        }
+        $start = now();
+        if (!is_null($this->start_date)){
+            $start = new Carbon($this->start_date);
+        }elseif(!is_null($this->last_observe_date)){
+            $start = new Carbon($this->last_observe_date);
+        }
+        $start_date = Jalalian::fromCarbon($start)->format('Y');
+        $diff = Jalalian::now()->format('Y')-$start_date;
+        $month = $months[$diff]??0;
+        if ($month==0){
+            return  -1;
+        }
+        if (!is_null($this->last_observe_date)){
+            $last =  New \Carbon\Carbon($this->last_observe_date);
+            $last = $last->addMonths($month);
+        }elseif (!is_null($this->start_date)){
+            $last =  New \Carbon\Carbon($this->start_date);
+            $last =  $last->addMonths($month);
+        }
+        try {
+            return $last->format('Y-m-d');
+
+        }catch (\Exception $e){
+            Log::alert($e->getMessage());
+            return "2022-03-21";
+        }
+
+
+    }
 }

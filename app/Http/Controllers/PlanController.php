@@ -26,7 +26,8 @@ class PlanController extends Controller
     {
         $data = $request->input();
         $hold = $request->has('hold')?1:0;
-        return view('pages.plans.index', compact('data','hold'));
+        $need_observe = $request->has('need_observe')?1:0;
+        return view('pages.plans.index', compact('data','hold','need_observe'));
     }
 
     /**
@@ -328,6 +329,9 @@ class PlanController extends Controller
                 $employer->save();
             }
         }
+        $plan = Plan::find($planID);
+        $plan->next_observe = $plan->miladiNextObserve();
+        $plan->save();
     }
 
     public function doneObserves(Request $request)

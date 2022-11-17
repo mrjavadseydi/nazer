@@ -55,6 +55,7 @@ if( !function_exists('shamsi2miladi') ){
             return Jalalian::fromFormat($dateFormat, $dateString)->toCarbon();
 
         }catch (Exception $e){
+//            dd($e->getMessage());
             return  "";
         }
     }
@@ -132,5 +133,21 @@ if (!function_exists('has_problem')){
         if (!$last_observer)
             return false;
         return (bool) \App\Models\ObserveProblem::where('observe_id',$last_observer->id)->where('problem_id',$problem_id)->first() ;
+    }
+}
+if (!function_exists('sendSms')){
+    function sendSms($pattern,$phone,$input_data=[]){
+        $username = config('ippanel.username');
+        $password = config('ippanel.password');
+        $from = "+983000505";
+        $pattern_code = $pattern;
+        $to = [$phone];
+        $url = "https://ippanel.com/patterns/pattern?username=" . $username . "&password=" . urlencode($password) . "&from=$from&to=" . json_encode($to) . "&input_data=" . urlencode(json_encode($input_data)) . "&pattern_code=$pattern_code";
+        $handler = curl_init($url);
+        curl_setopt($handler, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($handler, CURLOPT_POSTFIELDS, $input_data);
+        curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($handler);
+        return $response;
     }
 }

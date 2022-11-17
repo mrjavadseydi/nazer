@@ -15,7 +15,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+         $schedule->command('next:observe')->everyFourHours();
+         $schedule->command('sms:daily')->dailyAt('21:00');
+         $schedule->command('sms:emergency')->weeklyOn(6, "8:00");
+         $schedule->command('sms:weekly')->weeklyOn(4, "8:00");
     }
 
     /**

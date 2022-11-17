@@ -26,7 +26,7 @@ class AuthController extends Controller
         $password = $request->password;
 
         if( Auth::attempt(['nationalityCode' => $nationalityCode, 'password' => $password]) ){
-            return redirect()->route('plans.index');
+            return redirect()->route('plans.index',['need_observe'=>'true']);
         }
         return back();
     }

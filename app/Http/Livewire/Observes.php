@@ -109,7 +109,12 @@ class Observes extends LivewireDatatable
                 return Employer::query()->where('plan_id',$date)->count()??0;
             })->label('تعداد کارکنان')->alignRight()->headerAlignCenter(),
 
-
+            Column::callback(['plan.longitude','plan.latitude'],function ($long,$lat){})->alignCenter()->headerAlignCenter()
+                ->view('components.location')->label('gps')->exportCallback(function ($long,$lat){
+                    if ($lat){
+                        return"دارد";
+                    }
+                }),
             Column::callback(['id'], function ($observeID){
                 $planID = Observe::find($observeID)->load('plan')->plan->id;
                 $buttonName = 'مشاهده';

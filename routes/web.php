@@ -112,10 +112,10 @@ Route::post('/upload', function (Request $request) {
         $image->move(public_path('uploads'));
     }
 })->name('upload');
-Route::get('/test',function (){
-   $plan = \App\Models\Plan::find(1004);
-   dd($plan,$plan->nextObserve());
-});
+//Route::get('/test',function (){
+//   $plan = \App\Models\Plan::find(1004);
+//   dd($plan,$plan->nextObserve());
+//});
 /*
 Route::get('/test', function () {
     $files = scandir(public_path('uploads'));

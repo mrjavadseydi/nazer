@@ -6,7 +6,7 @@
         ویرایش
     </a>
     <a href="{{ route('change-supervisor.index', $id) }}" class="btn btn-sm btn-warning font-size-h5">
-        انتقال برنامه
+        انتقال طرح
     </a>
     <a href="javascript:;" class="btn btn-sm btn-danger font-size-h5" data-remove>
         حذف

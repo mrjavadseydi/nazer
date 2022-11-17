@@ -4,8 +4,8 @@
 @endpush
 @section('auth_content')
     <div class="login login-4 login-signin-on d-flex flex-row-fluid" id="kt_login">
-{{--    <div class="d-flex flex-center flex-row-fluid bgi-size-cover bgi-position-top bgi-no-repeat" style="background-image: url('{{ url('assets/img/bg-3.jpg') }}');">--}}
-    <div class="d-flex flex-center flex-row-fluid bgi-size-cover bgi-position-top bgi-no-repeat">
+    <div class="d-flex flex-center flex-row-fluid bgi-size-cover bgi-position-top bgi-no-repeat" style="background-image: url('{{ url('assets/img/bg-3.jpg') }}');">
+{{--    <div class="d-flex flex-center flex-row-fluid bgi-size-cover bgi-position-top bgi-no-repeat">--}}
         <div class="login-form text-center p-7 position-relative overflow-hidden">
             <!--begin::Login Header-->
             <div class="d-flex flex-center mb-15">

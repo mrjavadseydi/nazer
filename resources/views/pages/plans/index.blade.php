@@ -11,9 +11,9 @@
 @section('dashboard_content')
     <div class="container-fluid p-0">
         @if( isset($data['supervisorID']) )
-            <livewire:plans :supervisorid="$data['supervisorID']" :active="$hold" />
+            <livewire:plans :supervisorid="$data['supervisorID']" :active="$hold" :need_observe="$need_observe" />
         @else
-            <livewire:plans  :active="$hold"/>
+            <livewire:plans  :active="$hold" :need_observe="$need_observe"/>
         @endif
     </div>
 @endsection

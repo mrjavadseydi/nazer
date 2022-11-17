@@ -39,9 +39,15 @@ return [
             'url' => '/dashboard/plans',
             'permission' => 'plans'
         ],
+
         [
             'title' => 'لیست طرح ها غیر فعال',
             'url' => '/dashboard/plans?hold=true',
+            'permission' => 'plans'
+        ],
+        [
+            'title' => 'طرح های در انتظار بازدید',
+            'url' => '/dashboard/plans?need_observe=true',
             'permission' => 'plans'
         ],
         [
@@ -109,6 +115,11 @@ return [
             'title' => 'گزارشات',
             'url' => '/dashboard',
             'permission' => 'dashboard'
+        ],
+        [
+            'title' => 'طرح های در انتظار بازدید',
+            'url' => '/dashboard/plans?need_observe=true',
+            'permission' => 'plans'
         ],
         [
             'title' => 'لیست طرح ها',
