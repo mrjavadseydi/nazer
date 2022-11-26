@@ -41,7 +41,9 @@ class EmergencySMSCommand extends Command
     {
         $supervisors = Supervisor::all();
         foreach ($supervisors as $supervisor){
-            $needObserve = Plan::where('supervisor_id',$supervisor->id)->where('next_observe','<',now())->count();
+            $needObserve = Plan::where('supervisor_id',$supervisor->id)
+                ->where('next_observe','<',now())
+                ->where('on_hold',0)->count();
             if ($needObserve>0){
                sendSms('278fg3uwdks8809',fa2en($supervisor->phone),['name'=>$supervisor->fullName,'count'=>$needObserve]);
             }

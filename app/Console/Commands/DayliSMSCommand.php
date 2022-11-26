@@ -55,8 +55,9 @@ class DayliSMSCommand extends Command
             ///send report to supervisor
             print_r(sendSms('22zq12oe8m7fwpx',$phone,['name'=>$name,'count'=>$count]));
         }
-        sendSms('1gjqri39kxvtuyg','09151641217',['name'=>'مهندس پاسبان','count'=>count($todayObserves)]);
-        sendSms('1gjqri39kxvtuyg','09397688174',['name'=>'مهندس صیدی','count'=>count($todayObserves)]);
+        $all = Observe::where('created_at','>',now()->startOfDay())->count();
+        sendSms('1gjqri39kxvtuyg','09151641217',['name'=>'مهندس پاسبان','count'=>$all]);
+        sendSms('1gjqri39kxvtuyg','09397688174',['name'=>'مهندس صیدی','count'=>$all]);
         return 0;
     }
 }

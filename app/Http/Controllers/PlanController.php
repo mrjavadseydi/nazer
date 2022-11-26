@@ -15,6 +15,7 @@ use App\Models\Suggest;
 use App\Models\Supervisor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PlanController extends Controller
 {
@@ -187,151 +188,160 @@ class PlanController extends Controller
 
     public function storeObserve(Request $request, $planID)
     {
+
+        DB::beginTransaction();
+
+        try {
 //        dd($request->employers);
-        $courses = $request->courses;
-        $suggests = $request->suggests;
+            $courses = $request->courses;
+            $suggests = $request->suggests;
 
-        if ($courses) {
-            $found_other = array_search('other', $courses);
-            if ($found_other)
-                unset($courses[$found_other]);
-        }
-
-        if ($suggests) {
-            foreach ($suggests as $suggest) {
-                $suggestModel = new Suggest();
-                $suggestModel->title = $suggest;
-                $suggestModel->save();
+            if ($courses) {
+                $found_other = array_search('other', $courses);
+                if ($found_other)
+                    unset($courses[$found_other]);
             }
-        }
 
-        $now = now();
-        $date = fa2en($request->observe_date);
-        $expiration = shamsi2miladi('Y/m/d', $date);
-        $expiration->addHours($now->hour);
-        $expiration->addMinutes($now->minute);
-        $date = $expiration->toDate();
-        $stringDate = $date->format('Y/m/d');
-
-        $plan = Plan::find($planID)->load(['supervisor', 'performer']);
-        $plan->last_observe_date = $date;
-        $plan->distance = $request->distance;
-        $plan->latitude = $request->latitude;
-        $plan->longitude = $request->longitude;
-        if ($request->filled('description')) {
-            $plan->description = $request->description;
-
-        }
-        if ($request->filled('location_type')) {
-            $plan->location_type = $request->location_type;
-
-        }
-        if ($request->is_special == 'yes') {
-            $plan->is_special = true;
-            $plan->special_reason = $request->special_reason;
-        }
-        if ($request->is_exhibition == 'yes') {
-            $plan->is_exhibition = true;
-            $plan->exhibition_level = $request->exhibition_level;
-            $plan->exhibition_desire = $request->exhibition_desire;
-        }
-        if ($request->has_employment == 'yes') {
-            $plan->has_employment = true;
-        }
-        if ($request->filled('branch_id')) {
-            $plan->branch_id = $request->branch_id;
-        }
-        if ($request->filled('bank_id')) {
-            $plan->bank_id = $request->bank_id;
-        }
-
-
-        if ($request->filled('installment')) {
-            $plan->installment = $request->installment;
-        }
-        if ($request->filled('loan_amount')) {
-            $plan->loan_amount = $request->loan_amount;
-        }
-        if ($request->filled('loan_time')) {
-            $plan->loan_time = shamsi2miladi('Y/m/d', fa2en($request->loan_time))->format('Y/m/d');
-//            dd($plan->loan_time);
-        }
-
-        $plan->save();
-
-        $observe = Observe::where('plan_id', $plan->id)->whereDate('observe_date', $stringDate)->first();
-        $found = true;
-        if (!$observe) {
-            $observe = new Observe();
-            $found = false;
-        }
-        if (!$found)
-            $observe->supervisor_id = Supervisor::where('nationalityCode', Auth::user()->nationalityCode)->first()->id;
-        $observe->performer_id = $plan->performer->id;
-        $observe->plan_id = $plan->id;
-        $observe->observe_date = $date;
-        $observe->monthly_charge = $request->monthly_charge;
-        $observe->monthly_income = $request->monthly_income;
-        $observe->net_worth = $request->net_worth;
-
-        $observe->save();
-        if ($request->has('problems')) {
-
-            foreach ($request->problems as $problem) {
-                if (!ObserveProblem::where('observe_id', $observe->id)->where('problem_id', $problem)->first()) {
-                    ObserveProblem::create([
-                        'observe_id' => $observe->id,
-                        'problem_id' => $problem
-                    ]);
+            if ($suggests) {
+                foreach ($suggests as $suggest) {
+                    $suggestModel = new Suggest();
+                    $suggestModel->title = $suggest;
+                    $suggestModel->save();
                 }
             }
 
-            ObserveProblem::where('observe_id', $observe->id)->whereNotIn('problem_id', $request->problems)->delete();
-        }
-        foreach ($request->observe_files as $item) {
-            $documentID = $item['document'];
-            $document = $plan->documents()->find($documentID);
-            if (isset($item['file'])) {
-                $image = new Image();
-                $image->url = upload($item['file']);
-                $image->document_id = $documentID;
-                $image->plan_id = $plan->id;
-                $image->save();
+            $now = now();
+            $date = fa2en($request->observe_date);
+            $expiration = shamsi2miladi('Y/m/d', $date);
+            $expiration->addHours($now->hour);
+            $expiration->addMinutes($now->minute);
+            $date = $expiration->toDate();
+            $stringDate = $date->format('Y/m/d');
 
-                $plan->documents()->attach($documentID);;
+            $plan = Plan::find($planID)->load(['supervisor', 'performer']);
+            $plan->last_observe_date = $date;
+            $plan->distance = $request->distance;
+            $plan->latitude = $request->latitude;
+            $plan->longitude = $request->longitude;
+            if ($request->filled('description')) {
+                $plan->description = $request->description;
+
             }
-        }
+            if ($request->filled('location_type')) {
+                $plan->location_type = $request->location_type;
 
-        $performer = $plan->performer;
-        $performer->need_course = $request->need_course == 'yes';
-        $performer->courses()->sync($courses);
-        $performer->save();
-
-        if ($request->employers) {
-            foreach ($request->employers as $emp) {
-                $employer = Employer::where([
-                    ['nationalityCode', $emp['nationalityCode']],
-                    ['plan_id', $planID]
-                ])->first();
-                if (!$employer)
-                    $employer = new Employer();
-
-                $employer->nationalityCode = $emp['nationalityCode'];
-                $employer->fullName = $emp['fullName'];
-                $employer->supportStatus = $emp['supportStatus'];
-                $employer->phone = $emp['phone'];
-                $employer->gender = $emp['gender'];
-                $employer->paid_status = $emp['paid_status'];
-                $employer->is_insured = $emp['is_insured'];
-                $employer->start_date = shamsi2miladi('Y/m/d', fa2en($emp['start_date']));
-                $employer->employer_status = $emp['employer_status'];
-                $employer->plan_id = $planID;
-                $employer->save();
             }
+            if ($request->is_special == 'yes') {
+                $plan->is_special = true;
+                $plan->special_reason = $request->special_reason;
+            }
+            if ($request->is_exhibition == 'yes') {
+                $plan->is_exhibition = true;
+                $plan->exhibition_level = $request->exhibition_level;
+                $plan->exhibition_desire = $request->exhibition_desire;
+            }
+            if ($request->has_employment == 'yes') {
+                $plan->has_employment = true;
+            }
+            if ($request->filled('branch_id')) {
+                $plan->branch_id = $request->branch_id;
+            }
+            if ($request->filled('bank_id')) {
+                $plan->bank_id = $request->bank_id;
+            }
+
+
+            if ($request->filled('installment')) {
+                $plan->installment = $request->installment;
+            }
+            if ($request->filled('loan_amount')) {
+                $plan->loan_amount = $request->loan_amount;
+            }
+            if ($request->filled('loan_time')) {
+                $plan->loan_time = shamsi2miladi('Y/m/d', fa2en($request->loan_time))->format('Y/m/d');
+                //            dd($plan->loan_time);
+            }
+
+            $plan->save();
+
+            $observe = Observe::where('plan_id', $plan->id)->whereDate('observe_date', $stringDate)->first();
+            $found = true;
+            if (!$observe) {
+                $observe = new Observe();
+                $found = false;
+            }
+            if (!$found)
+                $observe->supervisor_id = Supervisor::where('nationalityCode', Auth::user()->nationalityCode)->first()->id;
+            $observe->performer_id = $plan->performer->id;
+            $observe->plan_id = $plan->id;
+            $observe->observe_date = $date;
+            $observe->monthly_charge = $request->monthly_charge;
+            $observe->monthly_income = $request->monthly_income;
+            $observe->net_worth = $request->net_worth;
+
+            $observe->save();
+            if ($request->has('problems')) {
+
+                foreach ($request->problems as $problem) {
+                    if (!ObserveProblem::where('observe_id', $observe->id)->where('problem_id', $problem)->first()) {
+                        ObserveProblem::create([
+                            'observe_id' => $observe->id,
+                            'problem_id' => $problem
+                        ]);
+                    }
+                }
+
+                ObserveProblem::where('observe_id', $observe->id)->whereNotIn('problem_id', $request->problems)->delete();
+            }
+            foreach ($request->observe_files as $item) {
+                $documentID = $item['document'];
+                $document = $plan->documents()->find($documentID);
+                if (isset($item['file'])) {
+                    $image = new Image();
+                    $image->url = upload($item['file']);
+                    $image->document_id = $documentID;
+                    $image->plan_id = $plan->id;
+                    $image->save();
+
+                    $plan->documents()->attach($documentID);;
+                }
+            }
+
+            $performer = $plan->performer;
+            $performer->need_course = $request->need_course == 'yes';
+            $performer->courses()->sync($courses);
+            $performer->save();
+
+            if ($request->employers) {
+                foreach ($request->employers as $emp) {
+                    $employer = Employer::where([
+                        ['nationalityCode', $emp['nationalityCode']],
+                        ['plan_id', $planID]
+                    ])->first();
+                    if (!$employer)
+                        $employer = new Employer();
+
+                    $employer->nationalityCode = $emp['nationalityCode'];
+                    $employer->fullName = $emp['fullName'];
+                    $employer->supportStatus = $emp['supportStatus'];
+                    $employer->phone = $emp['phone'];
+                    $employer->gender = $emp['gender'];
+                    $employer->paid_status = $emp['paid_status'];
+                    $employer->is_insured = $emp['is_insured'];
+                    $employer->start_date = shamsi2miladi('Y/m/d', fa2en($emp['start_date']));
+                    $employer->employer_status = $emp['employer_status'];
+                    $employer->plan_id = $planID;
+                    $employer->save();
+                }
+            }
+            $plan = Plan::find($planID);
+            $plan->next_observe = $plan->miladiNextObserve();
+            $plan->save();
+            DB::commit();
+        }catch (\Exception $e) {
+            DB::rollback();
+            // something went wrong
         }
-        $plan = Plan::find($planID);
-        $plan->next_observe = $plan->miladiNextObserve();
-        $plan->save();
     }
 
     public function doneObserves(Request $request)

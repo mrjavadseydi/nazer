@@ -55,8 +55,9 @@ class WeeklySMSCommand extends Command
             ///send report to supervisor
             print_r(sendSms('m533x72h476aql1',$phone,['name'=>$name,'count'=>$count]));
         }
-        sendSms('qs1n8hh4o6bqew5','09151641217',['name'=>'مهندس پاسبان','count'=>count($todayObserves)]);
-        sendSms('qs1n8hh4o6bqew5','09397688174',['name'=>'مهندس صیدی','count'=>count($todayObserves)]);
+        $count = Observe::where('created_at','>',now()->subDays(7)->startOfDay())->count();
+        sendSms('qs1n8hh4o6bqew5','09151641217',['name'=>'مهندس پاسبان','count'=>$count]);
+        sendSms('qs1n8hh4o6bqew5','09397688174',['name'=>'مهندس صیدی','count'=>$count]);
         return 0;
     }
 }

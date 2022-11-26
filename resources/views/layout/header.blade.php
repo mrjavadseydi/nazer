@@ -67,16 +67,16 @@
 
         @media screen and (min-width: 600px) {
             * {
-                font-size: 18px !important;
+                font-size: 14px !important;
             }
 
             .table .table-row:first-child > div button{
-                padding: 1.5em !important;
+                padding: 1em !important;
                 font-size: 16px;
             }
 
             .table .table-row:not(:nth-child(2)):not(:first-child) > div{
-                padding: 1em !important;
+                padding: 0.1em !important;
             }
 
             .loading{

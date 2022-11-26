@@ -78,7 +78,7 @@
                 <div class="row text-right">
                     <div class="col-lg-4 col-md-6">
                         <div class="form-group">
-                            <label for="" class="form-label">کد ملی:
+                            <label for=""  class="form-label">کد ملی:
                                 <strong>{{ $plan->performer->nationalityCode }}</strong></label>
                         </div>
                     </div>
@@ -188,7 +188,7 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="" class="form-label"><strong>تاریخ بازدید</strong></label>
-                                    <input type="text" class="form-control persianDate mb-8" name="observe_date">
+                                    <input  autocomplete="off" type="text" class="form-control persianDate mb-8" name="observe_date">
                                 </div>
                             </div>
 
@@ -197,12 +197,12 @@
                                     <label for="" class="form-label"><strong>موقعیت مکانی</strong></label>
                                     <div class="row align-items-start">
                                         <div class="form-group col-lg-4">
-                                            <input type="text" class="form-control" id="latitude" name="latitude"
-                                                   value="{{ $plan->latitude }}">
+                                            <input  type="text" class="form-control" id="latitude" name="latitude"
+                                                   value="{{ $plan->latitude }}" autocomplete="off">
                                         </div>
                                         <div class="form-group col-lg-4">
                                             <input type="text" class="form-control" id="longitude" name="longitude"
-                                                   value="{{ $plan->longitude }}">
+                                                   value="{{ $plan->longitude }}" autocomplete="off">
                                         </div>
                                         <div class="col-lg-4">
                                             <button class="btn btn-primary" type="button" onclick="getLocation()">دریافت
@@ -218,7 +218,7 @@
                                     <label for="" class="form-label"><strong>فاصله اداره تا موقعیت طرح (برحسب
                                             کیلومتر)</strong></label>
                                     <div class="d-flex">
-                                        <input type="number" inputmode="numeric" class="form-control" id="distance"
+                                        <input  autocomplete="off" type="number" inputmode="numeric" class="form-control" id="distance"
                                                name="distance"
                                                value="{{ $plan->distance }}">
                                         <button class="btn btn-primary mr-4" type="button" id="calcDistance"
@@ -245,7 +245,7 @@
                                         ریال)
 
                                     </label>
-                                    <input type="number" required step="10000000" class="form-control  mb-8"
+                                    <input  autocomplete="off" type="number" required step="10000000" class="form-control  mb-8"
                                            inputmode="numeric" min="0" name="monthly_charge"
                                            value="{{last_observe_value($plan->id,"monthly_charge")}}">
                                 </div>
@@ -258,7 +258,7 @@
                                         <span id="monthly_income"></span>
                                         ریال)
                                     </label>
-                                    <input type="number" required step="10000000" class="form-control  mb-8"
+                                    <input  autocomplete="off" type="number" required step="10000000" class="form-control  mb-8"
                                            inputmode="numeric" min="0" name="monthly_income"
                                            value="{{last_observe_value($plan->id,"monthly_income")}}">
                                 </div>
@@ -271,7 +271,7 @@
                                         <span id="net_worth"></span>
                                         ریال)
                                     </label>
-                                    <input type="number" required step="10000000" class="form-control  mb-8"
+                                    <input  autocomplete="off" type="number" required step="10000000" class="form-control  mb-8"
                                            inputmode="numeric" min="0" name="net_worth"
                                            value="{{last_observe_value($plan->id,"net_worth")}}">
                                 </div>
@@ -280,7 +280,7 @@
                                 <div class="form-group">
                                     <label for="start_date" class="form-label"><strong>تاریخ
                                             تسهیلات</strong></label>
-                                    <input type="text" class="form-control persianDate"
+                                    <input  autocomplete="off" type="text" class="form-control persianDate"
                                            name="loan_time"
 
                                            @if($plan->loan_time ) value="{{$plan->loan_time}}" @endif
@@ -311,7 +311,7 @@
                                         <span id="loan_amount"></span>
                                         ریال)
                                     </label>
-                                    <input type="number" required step="10000000" class="form-control  mb-8"
+                                    <input autocomplete="off" type="number" required step="10000000" class="form-control  mb-8"
                                            inputmode="numeric" min="0" name="loan_amount"
                                            value="{{$plan->loan_amount??0}}">
                                 </div>
@@ -324,7 +324,7 @@
                                         <span id="installment"></span>
                                         ریال)
                                     </label>
-                                    <input type="number" required step="500000" class="form-control  mb-8"
+                                    <input  autocomplete="off" type="number" required step="500000" class="form-control  mb-8"
                                            inputmode="numeric" min="0" name="installment"
                                            value="{{$plan->installment??0}}">
                                 </div>
@@ -334,7 +334,7 @@
                                     <label for="" class="form-label"><strong>نیاز به آموزش</strong></label>
                                     <div class="radio-inline">
                                         <label class="radio radio-outline radio-primary mr-0 ml-4">
-                                            <input type="radio" name="need_course" value="yes"
+                                            <input  type="radio" name="need_course" value="yes"
                                                    @if( $plan->performer->need_course ) checked
                                                    @endif data-need-courses/>
                                             <span class="mr-0 ml-2"></span>
@@ -543,7 +543,7 @@
                                                                 <div class="form-group">
                                                                     <label for="nationalityCode"><strong>کد
                                                                             ملی</strong></label>
-                                                                    <input type="text" class="form-control"
+                                                                    <input  autocomplete="off" type="text" class="form-control"
                                                                            name="employers[{{ $employer->id }}][nationalityCode]"
                                                                            value="{{ $employer->nationalityCode }}"
                                                                            id="nationalityCode" required>
@@ -553,7 +553,7 @@
                                                                 <div class="form-group">
                                                                     <label for="fullName" class="form-label"><strong>نام
                                                                             خانوادگی</strong></label>
-                                                                    <input type="text" class="form-control"
+                                                                    <input  autocomplete="off" type="text" class="form-control"
                                                                            name="employers[{{ $employer->id }}][fullName]"
                                                                            value="{{ $employer->fullName }}"
                                                                            id="fullName"
@@ -582,7 +582,7 @@
                                                                 <div class="form-group">
                                                                     <label for="phone" class="form-label"><strong>شماره
                                                                             تماس</strong></label>
-                                                                    <input type="text" class="form-control"
+                                                                    <input  autocomplete="off" type="text" class="form-control"
                                                                            name="employers[{{ $employer->id }}][phone]"
                                                                            value="{{ $employer->phone }}" id="phone">
                                                                 </div>
@@ -592,7 +592,7 @@
                                                                     <label for="employer_status"
                                                                            class="form-label"><strong>وضعیت
                                                                             شاغل در طرح</strong></label>
-                                                                    <input type="text" class="form-control"
+                                                                    <input  autocomplete="off" type="text" class="form-control"
                                                                            name="employers[{{ $employer->id }}][employer_status]"
                                                                            value="{{ $employer->employer_status }}"
                                                                            id="employer_status">
@@ -621,7 +621,7 @@
                                                                 <div class="form-group">
                                                                     <label for="start_date" class="form-label"><strong>تاریخ
                                                                             شروع</strong></label>
-                                                                    <input type="text" class="form-control persianDate"
+                                                                    <input  autocomplete="off" type="text" class="form-control persianDate"
                                                                            name="employers[{{ $employer->id }}][start_date]"
                                                                            value="{{ $employer->start_date }}"
                                                                            id="start_date">
@@ -1170,15 +1170,13 @@
                         contentType: false,
                         processData: false,
                         cache: false,
-                        dataType: "json",
                         error: function (xhr, status, error) {
                             waitingDialog.close();
+                            console.log(error)
                             Swal.fire({
-                                title: 'بازدید با موفقیت ثبت شد',
-                                icon: 'success',
-                            }).then(result => {
-                                window.location.href = '{{ route('plans.index') }}'
-                            });
+                                title: 'ثبت بازدید با خطا مواجه شد !',
+                                icon: 'error',
+                            })
                         },
                         success: function (data) {
                             waitingDialog.close();
@@ -1186,7 +1184,7 @@
                                 title: 'بازدید با موفقیت ثبت شد',
                                 icon: 'success',
                             }).then(result => {
-                                window.location.href = '{{ route('plans.index') }}'
+                                window.location.href =  '{{ request()->url() }}'
                             });
                         },
                         complete: function () {
